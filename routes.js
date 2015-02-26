@@ -1,11 +1,12 @@
 var  db = require('./db')
 var schema = db.schema
+
 exports.install = function(router) {
 	/*
 	 * GET user
      */
 	router.get('/users', function*(next) {
-		this.body = "index for users";
+		this.body = yield this.render('index');
 	})
 
 	/*

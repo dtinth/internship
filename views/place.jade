@@ -1,13 +1,10 @@
 html
 
 head
-  link(rel='stylesheet' href='../assets/css/bootstrap.min.css')
-  link(rel='stylesheet' href='../assets/css/main-style.css')
-  link(rel='stylesheet' href='../assets/css/main-components.css')
-  link(rel='stylesheet' href='../assets/css/bootstrap-markdown.min.css')
-  link(rel='stylesheet' href='../assets/css/select2.min.css')
-  link(rel='stylesheet' href='../assets/css/datepicker.css')
-  link(rel='tylesheet' href='../assets/fonts/fontawesome.ttf')
+  link(rel='stylesheet' href='./assets/css/bootstrap.min.css')
+  link(rel='stylesheet' href='./assets/css/main-style.css')
+  link(rel='stylesheet' href='./assets/css/main-components.css')
+  link(rel='tylesheet' href='./assets/fonts/fontawesome.ttf')
 
   
 body
@@ -53,58 +50,107 @@ body
         .google-maps-wrapper google maps here
   section.page-content-wrapper.overview-page-content-wrapper
     .row
-      form
       .panel.panel-default.respository 
         a.link-on-white Home 
         | / 
         a.link-on-white Overseas 
-        | / 
-        a.link-on-white NAIST
-        | / 
-        a.link-on-white Review by Student Name 
-        | / Edit
-      .overview-content-header Edit your review
+        | / NAIST
       .col-md-8.col-sm-12.col-lg-8
-        .row
-          .col-md-6.col-sm-6.col-lg-6
-            .review-topic-header Started Date
-            p.small-description วัน/เดือน/ปี ที่เริ่มการฝึกงาน
-            .date-time-picker-wrapper
-              input.form-control(data-provide='datepicker', placeholder='Started Date')
-          .col-md-6.col-sm-6.col-lg-6
-            .date-time-picker-wrapper
-              .review-topic-header Ended Date
-              p.small-description วัน/เดือน/ปี ที่จบการฝึกงาน
-              input.form-control(data-provide='datepicker', placeholder='Ended Date')
-        .row.overview.review-box
-          .review-topic-header Review
-          p.small-description เขียนอธิบายเกี่ยวกับการฝึกงานสามารถใช้ได้ทั้งภาษาไทยและภาษาอังกฤษ โดยมีเนื้อหาแนะนำดังนี้
-          p.small-description - เรียนรู้อะไรมาบ้าง
-          p.small-description - เป็นการวิจัยหรือทำงานที่บริษัท ประเภทของงาน
-          p.small-description - ชีวิตความเป็นอยู่
-          p.small-description - คำแนะนำอื่นๆ สำหรับรุ่นน้องที่สนใจ
-          textarea(name='content', data-provide='markdown',data-hidden-buttons='Preview', rows='20',required)
-          
-            
-          
+        .row.overview
+          .overview-content-header About NAIST
+            button.btn.btn-primary.btn-edit(type='button')
+              span.glyphicon.glyphicon-edit
+              |  Edit
+          .overview-content test
+          .overview-content-header Research
+          .overview-content test
+          .overview-content-header Review
+            button.btn.btn-primary.btn-edit(type='button', href='add_review')
+              span.glyphicon.glyphicon-pencil
+              |  Write Your Review
+          .overview-content
+            .panel.panel-default
+              ul.list-group
+                li.list-group-item
+                  .media
+                  .media-left
+                    a(href='#')
+                      img.media-object(src='assets/img/media.svg', alt='...')
+                  .media-body
+                    .row.student-review-info
+                      h4.media-heading.student-name Student Name
+                        small.work-field-and-time  Field of Work or smth
+                      .work-field-and-time 2014: Aug 21 - 22 
+                      .short-review
+                        span.glyphicon.glyphicon-heart.internship-rating
+                        span.glyphicon.glyphicon-heart.internship-rating
+                        span.glyphicon.glyphicon-heart.internship-rating
+                        span.glyphicon.glyphicon-heart.internship-rating
+                        span.glyphicon.glyphicon-heart.internship-rating
+                        "not more than 140 characthers not more than 140 characthers not more than 140 characthers not more than 140 characthers"
+                        span.readmore » read more
+                li.list-group-item
+                  .media
+                  .media-left
+                    a(href='#')
+                      img.media-object(src='assets/img/media.svg', alt='...')
+                  .media-body
+                    .row.student-review-info
+                      h4.media-heading.student-name Student Name
+                        small.work-field-and-time  Field of Work or smth
+                      .work-field-and-time 2014: Aug 21 - 22 
+                      .short-review
+                        span.glyphicon.glyphicon-heart.internship-rating
+                        span.glyphicon.glyphicon-heart.internship-rating
+                        span.glyphicon.glyphicon-heart.internship-rating
+                        span.glyphicon.glyphicon-heart.internship-rating
+                        span.glyphicon.glyphicon-heart.internship-rating
+                        "not more than 140 characthers not more than 140 characthers not more than 140 characthers not more than 140 characthers"
+                        span.readmore » read more
+                li.list-group-item
+                  .media
+                  .media-left
+                    a(href='#')
+                      img.media-object(src='assets/img/media.svg', alt='...')
+                  .media-body
+                    .row.student-review-info
+                      h4.media-heading.student-name Student Name
+                        small.work-field-and-time  Field of Work or smth
+                      .work-field-and-time 2014: Aug 21 - 22 
+                      .short-review
+                        span.glyphicon.glyphicon-heart.internship-rating
+                        span.glyphicon.glyphicon-heart.internship-rating
+                        span.glyphicon.glyphicon-heart.internship-rating
+                        span.glyphicon.glyphicon-heart.internship-rating
+                        span.glyphicon.glyphicon-heart.internship-rating
+                        "not more than 140 characthers not more than 140 characthers not more than 140 characthers not more than 140 characthers"
+                        span.readmore » read more
+                li.list-group-item
+                  .media
+                  .media-left
+                    a(href='#')
+                      img.media-object(src='assets/img/media.svg', alt='...')
+                  .media-body
+                    .row.student-review-info
+                      h4.media-heading.student-name Student Name
+                        small.work-field-and-time  Field of Work or smth
+                      .work-field-and-time 2014: Aug 21 - 22 
+                      .short-review
+                        span.glyphicon.glyphicon-heart.internship-rating
+                        span.glyphicon.glyphicon-heart.internship-rating
+                        span.glyphicon.glyphicon-heart.internship-rating
+                        span.glyphicon.glyphicon-heart.internship-rating
+                        span.glyphicon.glyphicon-heart.internship-rating
+                        "not more than 140 characthers not more than 140 characthers not more than 140 characthers not more than 140 characthers"
+                        span.readmore » read more
 
       .col-md-4.col-sm-12.col-lg-4
-        .col-md-12.col-lg-12.col-sm-12.panel-grey.tags-row.tags-box
-          .rating-header Select Tags
-            p.small-description เลือก Tags ที่เกี่ยวข้องกับการฝึกงาน เช่น ประเทศ, ประเภทของงาน ฯลฯ
-          select.col-md-12.col-lg-12.js-example-basic-multiple(multiple='multiple' style='width: 100%;')
-            option(value='AL') Alabama
-            option(value='WY') Wyoming
-            option(value='WY') Wyoming
-
-        .col-md-4.col-sm-4.col-lg-4
-        .row.col-md-12.col-lg-12.col-sm-12.panel-grey.tags-row
+        .row.col-md-12.col-lg-12.panel-grey.tags-row
           .panel.rating-panel.panel-grey
             .panel-body.rating-header Average of 6 ratings
             table.col-md-12.col-lg-12.col-sm-12.rating-table
               tr
                 td.col-md-6.col-lg-6.col-sm-6.rating-content Environment
-                  p.small-description บรรยากาศการทำงาน สนุกไหม
                 td.col-md-6.col-lg-6.col-sm-6.rating-content
                   span.glyphicon.glyphicon-heart.internship-rating
                   span.glyphicon.glyphicon-heart.internship-rating
@@ -114,7 +160,6 @@ body
                   span.glyphicon.glyphicon-heart.internship-rating
               tr
                 td.col-md-6.col-lg-6.col-sm-6.rating-content Coworker
-                  p.small-description เพื่อนร่วมงานเป็นอย่างไร
                 td.col-md-6.col-lg-6.col-sm-6.rating-content
                   span.glyphicon.glyphicon-heart.internship-rating
                   span.glyphicon.glyphicon-heart.internship-rating
@@ -124,7 +169,6 @@ body
                   span.glyphicon.glyphicon-heart.internship-rating
               tr
                 td.col-md-6.col-lg-6.col-sm-6.rating-content Employer/Mentor
-                  p.small-description ผู้ดูแลให้การดูแลและคำแนะนำที่ดีไหม
                 td.col-md-6.col-lg-6.col-sm-6.rating-content
                   span.glyphicon.glyphicon-heart.internship-rating
                   span.glyphicon.glyphicon-heart.internship-rating
@@ -134,7 +178,6 @@ body
                   span.glyphicon.glyphicon-heart.internship-rating
               tr
                 td.col-md-6.col-lg-6.col-sm-6.rating-content Transportation
-                  p.small-description การเดินทางสะดวกไหม
                 td.col-md-6.col-lg-6.col-sm-6.rating-content
                   span.glyphicon.glyphicon-heart.internship-rating
                   span.glyphicon.glyphicon-heart.internship-rating
@@ -144,7 +187,6 @@ body
                   span.glyphicon.glyphicon-heart.internship-rating
               tr
                 td.col-md-6.col-lg-6.col-sm-6.rating-content Benefits
-                  p.small-description ประโยชน์ต่างๆที่ได้รับจากการฝึกงานครั้งนี้
                 td.col-md-6.col-lg-6.col-sm-6.rating-content
                   span.glyphicon.glyphicon-heart.internship-rating
                   span.glyphicon.glyphicon-heart.internship-rating
@@ -154,7 +196,6 @@ body
                   span.glyphicon.glyphicon-heart.internship-rating
               tr
                 td.col-md-6.col-lg-6.col-sm-6.rating-content Overall
-                  p.small-description ความพึงพอใจโดยรวม
                 td.col-md-6.col-lg-6.col-sm-6.rating-content
                   span.glyphicon.glyphicon-heart.internship-rating
                   span.glyphicon.glyphicon-heart.internship-rating
@@ -162,15 +203,7 @@ body
                   span.glyphicon.glyphicon-heart.internship-rating
                   span.glyphicon.glyphicon-heart.internship-rating
                   span.glyphicon.glyphicon-heart.internship-rating
-    .row
-      button.btn.btn-primary.btn-save(type='submit') Save Change
   section.copyright-wrapper
     .copyright © 2011 SKE09 All Rights Reserved
-  script(src='../assets/js/jquery.js')
-  script(src='../assets/js/bootstrap.min.js')
-  script(src='../assets/js/bootstrap-markdown.js')
-  script(src='../assets/js/select2.min.js')
-  script(src='../assets/js/bootstrap-datepicker.js')
-  script
-    $(".js-example-basic-multiple").select2();
-  
+  script(src='./assets/js/jquery.js')
+  script(src='./assets/js/bootstrap.min.js')
