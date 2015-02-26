@@ -55,6 +55,12 @@ schema
   t.string('value')
 })
 
+.createTable('tag_review', function(t) {
+  t.increments()
+  t.integer('tag_id').unsigned().references('id').inTable('tags')
+  t.integer('review_id').unsigned().references('id').inTable('reviews')
+})
+
 .createTable('rating_categories', function(t) {
   t.increments()
   t.string('name')

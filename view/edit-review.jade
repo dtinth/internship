@@ -1,0 +1,176 @@
+html
+
+head
+  link(rel='stylesheet' href='../assets/css/bootstrap.min.css')
+  link(rel='stylesheet' href='../assets/css/main-style.css')
+  link(rel='stylesheet' href='../assets/css/main-components.css')
+  link(rel='stylesheet' href='../assets/css/bootstrap-markdown.min.css')
+  link(rel='stylesheet' href='../assets/css/select2.min.css')
+  link(rel='stylesheet' href='../assets/css/datepicker.css')
+  link(rel='tylesheet' href='../assets/fonts/fontawesome.ttf')
+
+  
+body
+
+  nav.navbar.navbar-grey.navbar-fixed-top
+      .container-fluid
+        // Brand and toggle get grouped for better mobile display
+        .navbar-header
+          button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#nav-menu')
+            span.sr-only Toggle navigation
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a.navbar-brand(href='index') CPSK Internship
+        // Collect the nav links, forms, and other content for toggling
+        #nav-menu.collapse.navbar-collapse
+          ul.nav.navbar-nav
+            li
+              a(href='thailand')
+                | Thailand 
+                span.sr-only (current)
+            li
+               a(href='overseas') Overseas
+            
+          ul.nav.navbar-nav.navbar-right
+              form.navbar-form.navbar-left(role='search')
+                .input-group.nav-search-group
+                  input.form-control.nav-search-input(type='text', placeholder='Find Internship')
+                  span.input-group-btn
+                    button.btn.btn-grey-to-white(type='button')
+                      span.glyphicon.glyphicon-search.nav-search-btn
+             
+            
+        // /.navbar-collapse
+      // /.container-fluid
+  section.header.place-page-header
+    .container.header-content-wrapper
+      .col-md-7.col-lg-7.col-sm-12
+        p.header-content NAIST
+        p.header-small-content NARA Institute of Science and Technology
+        p.header-small-content Ikoma, Nara, Japan
+      .col-md-5.col-lg-5.col-sm-12
+        .google-maps-wrapper google maps here
+  section.page-content-wrapper.overview-page-content-wrapper
+    .row
+      form
+      .panel.panel-default.respository 
+        a.link-on-white Home 
+        | / 
+        a.link-on-white Overseas 
+        | / 
+        a.link-on-white NAIST
+        | / 
+        a.link-on-white Review by Student Name 
+        | / Edit
+      .overview-content-header Edit your review
+      .col-md-8.col-sm-12.col-lg-8
+        .row
+          .col-md-6.col-sm-6.col-lg-6
+            .review-topic-header Started Date
+            p.small-description วัน/เดือน/ปี ที่เริ่มการฝึกงาน
+            .date-time-picker-wrapper
+              input.form-control(data-provide='datepicker', placeholder='Started Date')
+          .col-md-6.col-sm-6.col-lg-6
+            .date-time-picker-wrapper
+              .review-topic-header Ended Date
+              p.small-description วัน/เดือน/ปี ที่จบการฝึกงาน
+              input.form-control(data-provide='datepicker', placeholder='Ended Date')
+        .row.overview.review-box
+          .review-topic-header Review
+          p.small-description เขียนอธิบายเกี่ยวกับการฝึกงานสามารถใช้ได้ทั้งภาษาไทยและภาษาอังกฤษ โดยมีเนื้อหาแนะนำดังนี้
+          p.small-description - เรียนรู้อะไรมาบ้าง
+          p.small-description - เป็นการวิจัยหรือทำงานที่บริษัท ประเภทของงาน
+          p.small-description - ชีวิตความเป็นอยู่
+          p.small-description - คำแนะนำอื่นๆ สำหรับรุ่นน้องที่สนใจ
+          textarea(name='content', data-provide='markdown',data-hidden-buttons='Preview', rows='20',required)
+          
+            
+          
+
+      .col-md-4.col-sm-12.col-lg-4
+        .col-md-12.col-lg-12.col-sm-12.panel-grey.tags-row.tags-box
+          .rating-header Select Tags
+            p.small-description เลือก Tags ที่เกี่ยวข้องกับการฝึกงาน เช่น ประเทศ, ประเภทของงาน ฯลฯ
+          select.col-md-12.col-lg-12.js-example-basic-multiple(multiple='multiple' style='width: 100%;')
+            option(value='AL') Alabama
+            option(value='WY') Wyoming
+            option(value='WY') Wyoming
+
+        .col-md-4.col-sm-4.col-lg-4
+        .row.col-md-12.col-lg-12.col-sm-12.panel-grey.tags-row
+          .panel.rating-panel.panel-grey
+            .panel-body.rating-header Average of 6 ratings
+            table.col-md-12.col-lg-12.col-sm-12.rating-table
+              tr
+                td.col-md-6.col-lg-6.col-sm-6.rating-content Environment
+                  p.small-description บรรยากาศการทำงาน สนุกไหม
+                td.col-md-6.col-lg-6.col-sm-6.rating-content
+                  span.glyphicon.glyphicon-heart.internship-rating
+                  span.glyphicon.glyphicon-heart.internship-rating
+                  span.glyphicon.glyphicon-heart.internship-rating
+                  span.glyphicon.glyphicon-heart.internship-rating
+                  span.glyphicon.glyphicon-heart.internship-rating
+                  span.glyphicon.glyphicon-heart.internship-rating
+              tr
+                td.col-md-6.col-lg-6.col-sm-6.rating-content Coworker
+                  p.small-description เพื่อนร่วมงานเป็นอย่างไร
+                td.col-md-6.col-lg-6.col-sm-6.rating-content
+                  span.glyphicon.glyphicon-heart.internship-rating
+                  span.glyphicon.glyphicon-heart.internship-rating
+                  span.glyphicon.glyphicon-heart.internship-rating
+                  span.glyphicon.glyphicon-heart.internship-rating
+                  span.glyphicon.glyphicon-heart.internship-rating
+                  span.glyphicon.glyphicon-heart.internship-rating
+              tr
+                td.col-md-6.col-lg-6.col-sm-6.rating-content Employer/Mentor
+                  p.small-description ผู้ดูแลให้การดูแลและคำแนะนำที่ดีไหม
+                td.col-md-6.col-lg-6.col-sm-6.rating-content
+                  span.glyphicon.glyphicon-heart.internship-rating
+                  span.glyphicon.glyphicon-heart.internship-rating
+                  span.glyphicon.glyphicon-heart.internship-rating
+                  span.glyphicon.glyphicon-heart.internship-rating
+                  span.glyphicon.glyphicon-heart.internship-rating
+                  span.glyphicon.glyphicon-heart.internship-rating
+              tr
+                td.col-md-6.col-lg-6.col-sm-6.rating-content Transportation
+                  p.small-description การเดินทางสะดวกไหม
+                td.col-md-6.col-lg-6.col-sm-6.rating-content
+                  span.glyphicon.glyphicon-heart.internship-rating
+                  span.glyphicon.glyphicon-heart.internship-rating
+                  span.glyphicon.glyphicon-heart.internship-rating
+                  span.glyphicon.glyphicon-heart.internship-rating
+                  span.glyphicon.glyphicon-heart.internship-rating
+                  span.glyphicon.glyphicon-heart.internship-rating
+              tr
+                td.col-md-6.col-lg-6.col-sm-6.rating-content Benefits
+                  p.small-description ประโยชน์ต่างๆที่ได้รับจากการฝึกงานครั้งนี้
+                td.col-md-6.col-lg-6.col-sm-6.rating-content
+                  span.glyphicon.glyphicon-heart.internship-rating
+                  span.glyphicon.glyphicon-heart.internship-rating
+                  span.glyphicon.glyphicon-heart.internship-rating
+                  span.glyphicon.glyphicon-heart.internship-rating
+                  span.glyphicon.glyphicon-heart.internship-rating
+                  span.glyphicon.glyphicon-heart.internship-rating
+              tr
+                td.col-md-6.col-lg-6.col-sm-6.rating-content Overall
+                  p.small-description ความพึงพอใจโดยรวม
+                td.col-md-6.col-lg-6.col-sm-6.rating-content
+                  span.glyphicon.glyphicon-heart.internship-rating
+                  span.glyphicon.glyphicon-heart.internship-rating
+                  span.glyphicon.glyphicon-heart.internship-rating
+                  span.glyphicon.glyphicon-heart.internship-rating
+                  span.glyphicon.glyphicon-heart.internship-rating
+                  span.glyphicon.glyphicon-heart.internship-rating
+    .row
+      button.btn.btn-primary.btn-save(type='submit') Save Change
+  section.copyright-wrapper
+    .copyright © 2011 SKE09 All Rights Reserved
+  script(src='../assets/js/jquery.js')
+  script(src='../assets/js/bootstrap.min.js')
+  script(src='../assets/js/bootstrap-markdown.js')
+  script(src='../assets/js/select2.min.js')
+  script(src='../assets/js/bootstrap-datepicker.js')
+  script
+    $(".js-example-basic-multiple").select2();
+  
