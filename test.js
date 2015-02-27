@@ -9,7 +9,6 @@ var parser = require('koa-body-parser')
 
 //before
 app.use(views('./views','jade'))
-
 routes.install(router)
 
 //after
