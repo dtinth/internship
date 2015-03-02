@@ -98,6 +98,12 @@ a.place:hover{
     background-attachment: fixed;
     width: 100%;
 }
+.add-place-page-header{
+	background: #444;
+	background-repeat: no-repeat;
+    background-attachment: fixed;
+    width: 100%;
+}
 .header-small-content{
 	font-family: 'Arabica';
 	font-size: 30px;
@@ -122,7 +128,6 @@ a.place:hover{
 .place-content{
 	padding-left: 40px;
 	padding-right: 40px;
-	overflow: scroll;
 }
 .place-content-wrapper{
 	padding-top: 30px;
