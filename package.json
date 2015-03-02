@@ -1,20 +1,26 @@
 {
   "name": "internship-legacy",
   "version": "1.0.0",
-  "description": "",
+  "description": "Legacy project by SKE09 for Seminar course.",
   "main": "server.js",
   "dependencies": {
     "co": "^4.4.0",
     "knex": "^0.7.4",
     "koa": "^0.18.0",
+    "koa-body-parser": "^1.1.1",
+    "koa-cors": "0.0.14",
     "koa-jade": "^0.3.1",
     "koa-json": "^1.1.1",
+    "koa-render": "^0.2.1",
     "koa-router": "^4.2.0",
-    "mysql": "^2.5.4"
+    "koa-static": "^1.4.9",
+    "mysql": "^2.5.4",
+    "node-sass": "^2.0.1"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",

@@ -5,7 +5,7 @@ var json = require('koa-json')
 var views = require('koa-render')
 var routes = require('./routes')
 var serve = require('koa-static')
-
+var cors = require('koa-cors')
 var parser = require('koa-body-parser')
 
 
@@ -16,6 +16,7 @@ routes.install(router)
 
 //after
 app.use(json())
+   .use(cors())
    .use(parser())
    .use(router.routes())
    .use(router.allowedMethods());
