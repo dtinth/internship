@@ -2,9 +2,9 @@
 module.exports = require('knex')({
   client: 'mysql',
   connection: {
-    host     : '127.0.0.1',
-    user     : 'root',
-    password : '',
+    host     : 'localhost',
+    user     : 'legacy',
+    password : 'legacy_project',
     database : 'legacy'
   }
 })
