@@ -20,29 +20,42 @@ exports.install = function(router) {
 	 * GET all internship places objects
      */
 	router.get('/api/places' , function*(next) {
-		//var query = db.select().table('places')	
-		//var query = db.raw("SELECT * FROM places AS p LEFT JOIN (SELECT ra_re.place_id , name, AVG(score) as avg_score FROM rating_categories as ra_c LEFT JOIN (SELECT ra.rating_category_id , ra.score, re.place_id FROM reviews AS re LEFT JOIN ratings AS ra ON re.id = ra.review_id) as ra_re ON ra_c.id = ra_re.rating_category_id GROUP BY name) as reviews_ratings ON p.id = reviews_ratings.place_id");	io
-		var query = db.select().from(function() {
-						this.column('reviews_ratings.place_id', 'rating_categories.name')
-						 	.avg('reviews_ratings.score')
-						 		.from(function() {
-										this.column('ratings.rating_category_id','ratings.score','reviews.place_id')
-											.from('reviews')
-												.join('ratings', 'reviews.id', 'ratings.review_id').as('reviews_ratings')
-								})
-									.join('rating_categories', 'rating_categories.id', 'reviews_ratings.rating_category_id')
-										.groupBy('rating_categories.name')
-											.as('reviews_score')
-					})
-						.join('places', 'places.id', 'reviews_score.place_id')
-							.as('places_api')
+		 var places = db.select().from(function() {
+		 				this.column('reviews_ratings.place_id', 'rating_categories.name')
+		 				 	.avg('reviews_ratings.score')
+		 				 		.from(function() {
+		 								this.column('ratings.rating_category_id','ratings.score','reviews.place_id')
+		 									.from('reviews')
+		 										.join('ratings', 'reviews.id', 'ratings.review_id').as('reviews_ratings')
+		 						})
+		 							.join('rating_categories', 'rating_categories.id', 'reviews_ratings.rating_category_id')
+		 								.groupBy('rating_categories.name')
+		 									.as('reviews_score')
+		 			})
+		 				.join('places', 'places.id', 'reviews_score.place_id')
+		 					.as('places_api')
 
-		console.log(query.toString())
-		var result = yield query.exec(function(err, rows) {
+		var tags = db.column('reviews.place_id', 'tag_review.review_id', 'tag_review.tag_id')
+						.from('tag_review')
+							.join('reviews', 'reviews.id', 'tag_review.review_id')
+								.as('review_tag_review')
+		
+		var tag_category_tag = db.select().from('tag_categories').join('tags','tag_categories.id','tags.tag_category_id').as('tag_category_tag')
+
+		//console.log(places.toString())
+		//console.log(tags.toString())
+		//console.log(tag_category_tag.toString())
+		var places_result = yield places.exec(function(err, rows) {
 			if (err) return console.error(err);
 			//console.log(rows)
 		});
-		this.body = result
+		var tags_result = yield tags.exec(function(err,rows) {
+			if (err) return console.error(err);
+		})
+		var tag_category_tag_result = yield tag_category_tag.exec(function(err,rows) {
+			if (err) return console.error(err);
+		})
+		this.body = { "tag_category_tag" : tag_category_tag_result ,"places" : places_result , "tags" : tags_result }
 	});
 	
 	/*

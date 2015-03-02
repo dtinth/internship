@@ -52,6 +52,11 @@
 	margin-left: 20%;
 	margin-right: 20%;
 }
+.btn-add-head-photo{
+	height: 50px;
+	font-size: 18px;
+	width: 100%;
+}
 .triangle-row{
 	display: flex;
 	margin: 0;
@@ -169,4 +174,20 @@
 }
 .date-time-picker-wrapper{
 	margin-bottom: 30px;
+}
+.form-place-name{
+	font-size: 40px;
+	height: 60px;
+}
+.form-place-fullname{
+	font-size: 25px;
+	height: 40px;
+}
+.form-place-address{
+	font-size: 25px;
+	height: 40px;
+}
+.form-place-google-maps{
+	font-size: 15px;
+	height: 220px;
 }

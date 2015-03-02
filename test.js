@@ -4,11 +4,14 @@ var router = require('koa-router')()
 var json = require('koa-json')
 var views = require('koa-render')
 var routes = require('./routes')
+var serve = require('koa-static')
 
 var parser = require('koa-body-parser')
 
+
 //before
-app.use(views('./views','jade'))
+app.use(serve(__dirname+'/public'))
+app.use(views('./public','jade'))
 routes.install(router)
 
 //after
