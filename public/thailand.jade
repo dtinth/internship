@@ -1,238 +1,131 @@
-html
+include lib/common
++page('Thailand')
+  div(ng-controller='PlacesController')
+    section.header.thailand-page-header
+      .container.header-content-wrapper
+        p.header-content Thailand
+    section.page-content-wrapper.overview-page-content-wrapper
+      .row
+        .col-md-3.col-sm-3.col-lg-3
+          h1.filter-header.arabica Filters
+          div(ng-repeat='filter in filters')
+            div(class='{{"panel panel-" + filter.color}}')
+              .panel-heading.arabica {{filter.title}}
+              .panel-body.filter-check-wrapper
+                .checkbox(ng-repeat='option in filter.options')
+                  label
+                    input(type='checkbox')
+                    | {{option.text}}
 
-head
-  link(rel='stylesheet' href='/assets/css/bootstrap.min.css')
-  link(rel='stylesheet' href='/assets/css/main-style.css')
-  link(rel='stylesheet' href='/assets/css/main-components.css')
-  link(rel='tylesheet' href='/assets/fonts/fontawesome.ttf')
-  
-body
 
-  nav.navbar.navbar-grey.navbar-fixed-top
-      .container-fluid
-        // Brand and toggle get grouped for better mobile display
-        .navbar-header
-          button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#nav-menu')
-            span.sr-only Toggle navigation
-            span.icon-bar
-            span.icon-bar
-            span.icon-bar
-          a.navbar-brand(href='index') CPSK Internship
-        // Collect the nav links, forms, and other content for toggling
-        #nav-menu.collapse.navbar-collapse
-          ul.nav.navbar-nav
-            li
-              a(href='thailand')
-                | Thailand 
-                span.sr-only (current)
-            li
-               a(href='overseas') Overseas
-            
-          ul.nav.navbar-nav.navbar-right
-              form.navbar-form.navbar-left(role='search')
-                .input-group.nav-search-group
-                  input.form-control.nav-search-input(type='text', placeholder='Find Internship')
-                  span.input-group-btn
-                    button.btn.btn-grey-to-white(type='button')
-                      span.glyphicon.glyphicon-search.nav-search-btn
-             
-            
-        // /.navbar-collapse
-      // /.container-fluid
-  section.header.thailand-page-header
-    .container.header-content-wrapper
-      p.header-content Thailand
-  section.page-content-wrapper.overview-page-content-wrapper
-    .row
-      .col-md-3.col-sm-3.col-lg-3
-        h1.filter-header.arabica Filters
-        .panel.panel-blue
-          .panel-heading.arabica Paid
-          .panel-body
-            table.filter-check-wrapper
-              tr
-                td
-                  .filter-check-content 
-                    input#germany(type='checkbox', checked='checked', name='country').filter-check
-                    | Paid
-              tr
-                td
-                  .filter-check-content 
-                    input#germany(type='checkbox', checked='checked', name='country').filter-check
-                    | Non-Paid
-        .panel.panel-green
-          .panel-heading.arabica Field
-          .panel-body
-            table.filter-check-wrapper
-              tr
-                td
-                  .filter-check-content 
-                    input#germany(type='checkbox', checked='checked', name='country').filter-check
-                    | Data Mining
-              tr
-                td
-                  .filter-check-content 
-                    input#germany(type='checkbox', checked='checked', name='country').filter-check
-                    | Data Warehouse
-              tr
-                td
-                  .filter-check-content 
-                    input#germany(type='checkbox', checked='checked', name='country').filter-check
-                    | Web Service
-              tr
-                td
-                  .filter-check-content 
-                    input#germany(type='checkbox', checked='checked', name='country').filter-check
-                    | Business Intelligence
-              tr
-                td
-                  .filter-check-content 
-                    input#germany(type='checkbox', checked='checked', name='country').filter-check
-                    | Business IT
-              tr
-                td
-                  .filter-check-content 
-                    input#germany(type='checkbox', checked='checked', name='country').filter-check
-                    | Game Development
-              tr
-                td
-                  .filter-check-content 
-                    input#germany(type='checkbox', checked='checked', name='country').filter-check
-                    | Mobile Application
-              tr
-                td
-                  .filter-check-content 
-                    input#germany(type='checkbox', checked='checked', name='country').filter-check
-                    | iOS
-              tr
-                td
-                  .filter-check-content 
-                    input#germany(type='checkbox', checked='checked', name='country').filter-check
-                    | Android
-              tr
-                td
-                  .filter-check-content 
-                    input#germany(type='checkbox', checked='checked', name='country').filter-check
-                    | Research
-              tr
-                td
-                  .filter-check-content 
-                    input#germany(type='checkbox', checked='checked', name='country').filter-check
-                    | Facebook
-        .panel.panel-orange
-          .panel-heading.arabica Working Hours
-          .panel-body
-            table.filter-check-wrapper
-              tr
-                td
-                  .filter-check-content 
-                    input#germany(type='checkbox', checked='checked', name='country').filter-check
-                    | Fixed
-              tr
-                td
-                  .filter-check-content 
-                    input#germany(type='checkbox', checked='checked', name='country').filter-check
-                    | Flexible
-        .panel.panel-red
-          .panel-heading.arabica Programming Language
-          .panel-body
-            table.filter-check-wrapper
-              tr
-                td
-                  .filter-check-content 
-                    input#germany(type='checkbox', checked='checked', name='country').filter-check
-                    | JAVA
-              tr
-                td
-                  .filter-check-content 
-                    input#germany(type='checkbox', checked='checked', name='country').filter-check
-                    | PHP
-              tr
-                td
-                  .filter-check-content 
-                    input#germany(type='checkbox', checked='checked', name='country').filter-check
-                    | HTML
-              tr
-                td
-                  .filter-check-content 
-                    input#germany(type='checkbox', checked='checked', name='country').filter-check
-                    | CSS
-              tr
-                td
-                  .filter-check-content 
-                    input#germany(type='checkbox', checked='checked', name='country').filter-check
-                    | Javascript
-              tr
-                td
-                  .filter-check-content 
-                    input#germany(type='checkbox', checked='checked', name='country').filter-check
-                    | C
-              tr
-                td
-                  .filter-check-content 
-                    input#germany(type='checkbox', checked='checked', name='country').filter-check
-                    | C++
-              tr
-                td
-                  .filter-check-content 
-                    input#germany(type='checkbox', checked='checked', name='country').filter-check
-                    | C#
-              tr
-                td
-                  .filter-check-content 
-                    input#germany(type='checkbox', checked='checked', name='country').filter-check
-                    | Ruby
-              tr
-                td
-                  .filter-check-content 
-                    input#germany(type='checkbox', checked='checked', name='country').filter-check
-                    | Python
-              tr
-                td
-                  .filter-check-content 
-                    input#germany(type='checkbox', checked='checked', name='country').filter-check
-                    | .net
-              tr
-                td
-                  .filter-check-content 
-                    input#germany(type='checkbox', checked='checked', name='country').filter-check
-                    | Others
-      .col-md-9.col-sm-9.col-lg-9
-        h1.filter-header.arabica Internship Places
-        .panel.panel-default
-            ul.list-group
-              li.list-group-item.internship-list
-                .media
-                  .internship-rating-wrapper
-                    p
-                      span.glyphicon.glyphicon-heart.internship-rating
-                      span.glyphicon.glyphicon-heart.internship-rating
-                      span.glyphicon.glyphicon-heart.internship-rating
-                      span.glyphicon.glyphicon-heart.internship-rating
-                      span.glyphicon.glyphicon-heart.internship-rating
-                      |     (6)
-                      
-                  .media-left
-                    a(href='#')
-                      img.media-object(src='assets/img/media.svg', alt='...')
-                  .media-body
-                    .row.internship-info
-                      a(href='place').link-on-white
-                        h4.media-heading Internship place name
-                      |     Internship address
-                    .tags-wrapper
-                      span.label.label-black.tags Thailand
-                    .tags-wrapper
-                      span.label.label-blue.tags Paid
-                    .tags-wrapper
-                      span.label.label-green.tags Field of Work
-                    .tags-wrapper
-                      span.label.label-orange.tags Working Hours
-                    .tags-wrapper
-                      span.label.label-red.tags Programming Language
-              
-              
-section.copyright-wrapper
-  .copyright © 2011 SKE09 All Rights Reserved
-script(src='/assets/js/jquery.js')
-script(src='/assets/js/bootstrap.min.js')
+          .panel.panel-orange
+            .panel-heading.arabica Working Hours
+            .panel-body
+              table.filter-check-wrapper
+                tr
+                  td
+                    .filter-check-content 
+                      input#germany(type='checkbox', checked='checked', name='country').filter-check
+                      | Fixed
+                tr
+                  td
+                    .filter-check-content 
+                      input#germany(type='checkbox', checked='checked', name='country').filter-check
+                      | Flexible
+          .panel.panel-red
+            .panel-heading.arabica Programming Language
+            .panel-body
+              table.filter-check-wrapper
+                tr
+                  td
+                    .filter-check-content 
+                      input#germany(type='checkbox', checked='checked', name='country').filter-check
+                      | JAVA
+                tr
+                  td
+                    .filter-check-content 
+                      input#germany(type='checkbox', checked='checked', name='country').filter-check
+                      | PHP
+                tr
+                  td
+                    .filter-check-content 
+                      input#germany(type='checkbox', checked='checked', name='country').filter-check
+                      | HTML
+                tr
+                  td
+                    .filter-check-content 
+                      input#germany(type='checkbox', checked='checked', name='country').filter-check
+                      | CSS
+                tr
+                  td
+                    .filter-check-content 
+                      input#germany(type='checkbox', checked='checked', name='country').filter-check
+                      | Javascript
+                tr
+                  td
+                    .filter-check-content 
+                      input#germany(type='checkbox', checked='checked', name='country').filter-check
+                      | C
+                tr
+                  td
+                    .filter-check-content 
+                      input#germany(type='checkbox', checked='checked', name='country').filter-check
+                      | C++
+                tr
+                  td
+                    .filter-check-content 
+                      input#germany(type='checkbox', checked='checked', name='country').filter-check
+                      | C#
+                tr
+                  td
+                    .filter-check-content 
+                      input#germany(type='checkbox', checked='checked', name='country').filter-check
+                      | Ruby
+                tr
+                  td
+                    .filter-check-content 
+                      input#germany(type='checkbox', checked='checked', name='country').filter-check
+                      | Python
+                tr
+                  td
+                    .filter-check-content 
+                      input#germany(type='checkbox', checked='checked', name='country').filter-check
+                      | .net
+                tr
+                  td
+                    .filter-check-content 
+                      input#germany(type='checkbox', checked='checked', name='country').filter-check
+                      | Others
+        .col-md-9.col-sm-9.col-lg-9
+          h1.filter-header.arabica Internship Places
+          .panel.panel-default(ng-repeat='place in places')
+              ul.list-group
+                li.list-group-item.internship-list
+                  .media
+                    .internship-rating-wrapper
+                      p
+                        span.glyphicon.glyphicon-heart.internship-rating(ng-if='place.rating>=1')
+                        span.glyphicon.glyphicon-heart.internship-rating(ng-if='place.rating>=2')
+                        span.glyphicon.glyphicon-heart.internship-rating(ng-if='place.rating>=3')
+                        span.glyphicon.glyphicon-heart.internship-rating(ng-if='place.rating>=4')
+                        span.glyphicon.glyphicon-heart.internship-rating(ng-if='place.rating>=5')
+                        = " "
+                        | ({{place.review_count}})
+                    .media-left
+                      a(href='#')
+                        img.media-object(src='assets/img/media.svg', alt='...')
+                    .media-body
+                      .row.internship-info
+                        a(href='place').link-on-white
+                          h4.media-heading {{place.full_name}}
+                        |     {{place.address}}
+                      .tags-wrapper
+                        span.label.label-black.tags Thailand
+                      .tags-wrapper
+                        span.label.label-blue.tags Paid
+                      .tags-wrapper
+                        span.label.label-green.tags Field of Work
+                      .tags-wrapper
+                        span.label.label-orange.tags Working Hours
+                      .tags-wrapper
+                        span.label.label-red.tags Programming Language

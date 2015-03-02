@@ -183,11 +183,16 @@ a.place:hover{
 	margin-left: 20px;
 	margin-right: 20px;
 	padding-bottom: 15px;
-}
-.filter-check-content{
 	font-family: 'Arabica';
 	font-size: 18px;
+	.checkbox > label {
+		padding-left: 25px;
+	}
+	.checkbox > label > input {
+		margin-left: -25px;
+	}
 }
+
 input[type=checkbox].filter-check{
 	margin-right: 10px;
 }
