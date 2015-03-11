@@ -226,7 +226,15 @@ angular.module('internship', [])
     $http.get("http://128.199.76.147:8001/api/places")
 
     .success(function(response) {
-      console.log(response)
-      $scope.places_in_thailand = response.places;});
+      var places = response.places;
+      var tags = response.tags;
+      var tacCategory = response.tag_category_tag;
+
+      places.forEach(function(place) {
+        place.tags = tags.filter(function(tag) {
+          return tag.place_id = place.place_id
+        })
+      })
+      $scope.places_in_thailand = places;});
   }
 ])
