@@ -220,3 +220,13 @@ angular.module('internship', [])
     ]
   }
 ])
+.controller('ThailandPlaceController', [
+  '$scope','$http',
+  function($scope, $http) {
+    $http.get("http://128.199.76.147:8001/api/places")
+
+    .success(function(response) {
+      console.log(response)
+      $scope.places_in_thailand = response.places;});
+  }
+])
