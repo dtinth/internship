@@ -22,7 +22,7 @@ exports.install = function(router) {
 	router.get('/api/places' , function*(next) {
 		 var places = db.select().from(function() {
 		 				this.column('reviews_ratings.place_id', 'rating_categories.name')
-		 				 	.avg('reviews_ratings.score')
+		 				 	.avg('reviews_ratings.score as avg_rating').count('rating_categories.name as review_count')
 		 				 		.from(function() {
 		 								this.column('ratings.rating_category_id','ratings.score','reviews.place_id')
 		 									.from('reviews')
