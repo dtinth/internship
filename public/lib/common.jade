@@ -6,6 +6,10 @@ mixin page(title)
       link(rel='stylesheet' href='/assets/css/bootstrap.min.css')
       link(rel='stylesheet' href='/assets/css/main-style.css')
       link(rel='stylesheet' href='/assets/css/main-components.css')
+      if attributes.form
+        link(rel='stylesheet' href='/assets/css/bootstrap-markdown.min.css')
+        link(rel='stylesheet' href='/assets/css/select2.min.css')
+        link(rel='stylesheet' href='/assets/css/datepicker.css')
     body
       +navbar
       block
@@ -15,6 +19,11 @@ mixin page(title)
       script(src='/assets/js/bootstrap.min.js')
       script(src='/assets/js/angular.min.js')
       script(src='/assets/js/internship.js')
+      if attributes.form
+        script(src='/assets/js/bootstrap-markdown.js')
+        script(src='/assets/js/select2.min.js')
+        script(src='/assets/js/bootstrap-datepicker.js')
+        script(src='/assets/js/tags-select.js')
 
 mixin navbar
   nav.navbar.navbar-grey.navbar-fixed-top

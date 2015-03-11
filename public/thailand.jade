@@ -14,91 +14,14 @@ include lib/common
               .panel-body.filter-check-wrapper
                 .checkbox(ng-repeat='option in filter.options')
                   label
-                    input(type='checkbox')
+                    input(type='checkbox', checked='checked')
                     | {{option.text}}
 
 
-          .panel.panel-orange
-            .panel-heading.arabica Working Hours
-            .panel-body
-              table.filter-check-wrapper
-                tr
-                  td
-                    .filter-check-content 
-                      input#germany(type='checkbox', checked='checked', name='country').filter-check
-                      | Fixed
-                tr
-                  td
-                    .filter-check-content 
-                      input#germany(type='checkbox', checked='checked', name='country').filter-check
-                      | Flexible
-          .panel.panel-red
-            .panel-heading.arabica Programming Language
-            .panel-body
-              table.filter-check-wrapper
-                tr
-                  td
-                    .filter-check-content 
-                      input#germany(type='checkbox', checked='checked', name='country').filter-check
-                      | JAVA
-                tr
-                  td
-                    .filter-check-content 
-                      input#germany(type='checkbox', checked='checked', name='country').filter-check
-                      | PHP
-                tr
-                  td
-                    .filter-check-content 
-                      input#germany(type='checkbox', checked='checked', name='country').filter-check
-                      | HTML
-                tr
-                  td
-                    .filter-check-content 
-                      input#germany(type='checkbox', checked='checked', name='country').filter-check
-                      | CSS
-                tr
-                  td
-                    .filter-check-content 
-                      input#germany(type='checkbox', checked='checked', name='country').filter-check
-                      | Javascript
-                tr
-                  td
-                    .filter-check-content 
-                      input#germany(type='checkbox', checked='checked', name='country').filter-check
-                      | C
-                tr
-                  td
-                    .filter-check-content 
-                      input#germany(type='checkbox', checked='checked', name='country').filter-check
-                      | C++
-                tr
-                  td
-                    .filter-check-content 
-                      input#germany(type='checkbox', checked='checked', name='country').filter-check
-                      | C#
-                tr
-                  td
-                    .filter-check-content 
-                      input#germany(type='checkbox', checked='checked', name='country').filter-check
-                      | Ruby
-                tr
-                  td
-                    .filter-check-content 
-                      input#germany(type='checkbox', checked='checked', name='country').filter-check
-                      | Python
-                tr
-                  td
-                    .filter-check-content 
-                      input#germany(type='checkbox', checked='checked', name='country').filter-check
-                      | .net
-                tr
-                  td
-                    .filter-check-content 
-                      input#germany(type='checkbox', checked='checked', name='country').filter-check
-                      | Others
+         
         .col-md-9.col-sm-9.col-lg-9
           h1.filter-header.arabica Internship Places
-          .panel.panel-default(ng-repeat='place in places')
+          .panel.panel-default(ng-repeat='place in places_in_thailand')
               ul.list-group
                 li.list-group-item.internship-list
                   .media
@@ -109,11 +32,12 @@ include lib/common
                         span.glyphicon.glyphicon-heart.internship-rating(ng-if='place.rating>=3')
                         span.glyphicon.glyphicon-heart.internship-rating(ng-if='place.rating>=4')
                         span.glyphicon.glyphicon-heart.internship-rating(ng-if='place.rating>=5')
+                        span.glyphicon.glyphicon-heart.internship-rating(ng-if='place.rating>=6')
                         = " "
                         | ({{place.review_count}})
                     .media-left
                       a(href='#')
-                        img.media-object(src='assets/img/media.svg', alt='...')
+                        img.media-object(src='assets/img/media.svg')
                     .media-body
                       .row.internship-info
                         a(href='place').link-on-white

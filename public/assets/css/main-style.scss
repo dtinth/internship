@@ -60,7 +60,7 @@ a.place:hover{
 	border-color: #222;
 }
 .nav-search-btn{
-	font-size: 20px;
+	font-size: 15px;
 }
 
 .header{
@@ -321,4 +321,10 @@ input[type=checkbox].filter-check{
 	color: #333;
 	font-size: 25px;
 	font-family: 'Arabica';
+}
+.add-place-field-row{
+	margin-top: 15px;
+}
+.lat-field{
+	margin-right: 15px;
 }

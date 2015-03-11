@@ -1,156 +1,69 @@
-html
+include lib/common
++page('Thailand')
+  div(ng-controller='SpecificPlacesController')
+    div(ng-repeat='place in place')
+      section.header.place-page-header
+        .container.header-content-wrapper
+          .col-md-7.col-lg-7.col-sm-12
+            p.header-content {{place.name}}
+            p.header-small-content {{place.full_name}}
+            p.header-small-content {{place.address}}
+          .col-md-5.col-lg-5.col-sm-12
+            .google-maps-wrapper GG maps
+      section.page-content-wrapper.overview-page-content-wrapper
+        .row
+          button.btn.btn-big-delete Remove This Review
+        .row
+          .panel.panel-default.respository 
+            a(href='index').link-on-white Home 
+            | / 
+            a(href='overseas').link-on-white Overseas
+            | / 
+            a(href='place').link-on-white {{place.name}}
+            | / Review by Student Name
+          .col-md-8.col-sm-12.col-lg-8
+            .row.overview
+              .overview-content-header About NAIST
+                button.btn.btn-primary.btn-edit(type='button')
+                  span.glyphicon.glyphicon-edit
+                  |  Edit
+              .overview-content test
+              .overview-content-header Research
+              .overview-content test
+              .overview-content-header Research
+              .overview-content test
+              .overview-content-header Research
+              .overview-content test
+              
 
-head
-  link(rel='stylesheet' href='/assets/css/bootstrap.min.css')
-  link(rel='stylesheet' href='/assets/css/main-style.css')
-  link(rel='stylesheet' href='/assets/css/main-components.css')
-  link(rel='tylesheet' href='/assets/fonts/fontawesome.ttf')
+          .col-md-4.col-sm-12.col-lg-4
+            .col-md-12.col-lg-12.panel-grey.tags-row.tags-box
+              .tags-by-type
+                h4.tags-wrapper
+                  span.label.label-black.tags Thailand
+              .tags-by-type
+                h4.tags-wrapper
+                  span.label.label-blue.tags Paid
+              .tags-by-type
+                h4.tags-wrapper
+                  span.label.label-green.tags Field of Work
+              .tags-by-type
+                h4.tags-wrapper
+                  span.label.label-orange.tags Working Hours
+              .tags-by-type
+                h4.tags-wrapper
+                  span.label.label-red.tags Programming Language
 
-  
-body
-
-  nav.navbar.navbar-grey.navbar-fixed-top
-      .container-fluid
-        // Brand and toggle get grouped for better mobile display
-        .navbar-header
-          button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#nav-menu')
-            span.sr-only Toggle navigation
-            span.icon-bar
-            span.icon-bar
-            span.icon-bar
-          a.navbar-brand(href='index') CPSK Internship
-        // Collect the nav links, forms, and other content for toggling
-        #nav-menu.collapse.navbar-collapse
-          ul.nav.navbar-nav
-            li
-              a(href='thailand')
-                | Thailand 
-                span.sr-only (current)
-            li
-               a(href='overseas') Overseas
-            
-          ul.nav.navbar-nav.navbar-right
-              form.navbar-form.navbar-left(role='search')
-                .input-group.nav-search-group
-                  input.form-control.nav-search-input(type='text', placeholder='Find Internship')
-                  span.input-group-btn
-                    button.btn.btn-grey-to-white(type='button')
-                      span.glyphicon.glyphicon-search.nav-search-btn
-             
-            
-        // /.navbar-collapse
-      // /.container-fluid
-  section.header.place-page-header
-    .container.header-content-wrapper
-      .col-md-7.col-lg-7.col-sm-12
-        p.header-content NAIST
-        p.header-small-content NARA Institute of Science and Technology
-        p.header-small-content Ikoma, Nara, Japan
-      .col-md-5.col-lg-5.col-sm-12
-        .google-maps-wrapper google maps here
-  section.page-content-wrapper.overview-page-content-wrapper
-    .row
-      button.btn.btn-big-delete Remove This Review
-    .row
-      .panel.panel-default.respository 
-        a.link-on-white Home 
-        | / 
-        a.link-on-white Overseas 
-        | / 
-        a.link-on-white NAIST
-        | / Review by Student Name
-      .col-md-8.col-sm-12.col-lg-8
-        .row.overview
-          .overview-content-header About NAIST
-            button.btn.btn-primary.btn-edit(type='button')
-              span.glyphicon.glyphicon-edit
-              |  Edit
-          .overview-content test
-          .overview-content-header Research
-          .overview-content test
-          .overview-content-header Research
-          .overview-content test
-          .overview-content-header Research
-          .overview-content test
-          
-
-      .col-md-4.col-sm-12.col-lg-4
-        .col-md-12.col-lg-12.panel-grey.tags-row.tags-box
-          .tags-by-type
-            h4.tags-wrapper
-              span.label.label-black.tags Thailand
-          .tags-by-type
-            h4.tags-wrapper
-              span.label.label-blue.tags Paid
-          .tags-by-type
-            h4.tags-wrapper
-              span.label.label-green.tags Field of Work
-          .tags-by-type
-            h4.tags-wrapper
-              span.label.label-orange.tags Working Hours
-          .tags-by-type
-            h4.tags-wrapper
-              span.label.label-red.tags Programming Language
-
-        .col-md-12.col-lg-12.panel-grey.tags-row
-          .panel.rating-panel.panel-grey
-            .panel-body.rating-header Average of 6 ratings
-            table.col-md-12.col-lg-12.col-sm-12.rating-table
-              tr
-                td.col-md-6.col-lg-6.col-sm-6.rating-content Environment
-                td.col-md-6.col-lg-6.col-sm-6.rating-content
-                  span.glyphicon.glyphicon-heart.internship-rating
-                  span.glyphicon.glyphicon-heart.internship-rating
-                  span.glyphicon.glyphicon-heart.internship-rating
-                  span.glyphicon.glyphicon-heart.internship-rating
-                  span.glyphicon.glyphicon-heart.internship-rating
-                  span.glyphicon.glyphicon-heart.internship-rating
-              tr
-                td.col-md-6.col-lg-6.col-sm-6.rating-content Coworker
-                td.col-md-6.col-lg-6.col-sm-6.rating-content
-                  span.glyphicon.glyphicon-heart.internship-rating
-                  span.glyphicon.glyphicon-heart.internship-rating
-                  span.glyphicon.glyphicon-heart.internship-rating
-                  span.glyphicon.glyphicon-heart.internship-rating
-                  span.glyphicon.glyphicon-heart.internship-rating
-                  span.glyphicon.glyphicon-heart.internship-rating
-              tr
-                td.col-md-6.col-lg-6.col-sm-6.rating-content Employer/Mentor
-                td.col-md-6.col-lg-6.col-sm-6.rating-content
-                  span.glyphicon.glyphicon-heart.internship-rating
-                  span.glyphicon.glyphicon-heart.internship-rating
-                  span.glyphicon.glyphicon-heart.internship-rating
-                  span.glyphicon.glyphicon-heart.internship-rating
-                  span.glyphicon.glyphicon-heart.internship-rating
-                  span.glyphicon.glyphicon-heart.internship-rating
-              tr
-                td.col-md-6.col-lg-6.col-sm-6.rating-content Transportation
-                td.col-md-6.col-lg-6.col-sm-6.rating-content
-                  span.glyphicon.glyphicon-heart.internship-rating
-                  span.glyphicon.glyphicon-heart.internship-rating
-                  span.glyphicon.glyphicon-heart.internship-rating
-                  span.glyphicon.glyphicon-heart.internship-rating
-                  span.glyphicon.glyphicon-heart.internship-rating
-                  span.glyphicon.glyphicon-heart.internship-rating
-              tr
-                td.col-md-6.col-lg-6.col-sm-6.rating-content Benefits
-                td.col-md-6.col-lg-6.col-sm-6.rating-content
-                  span.glyphicon.glyphicon-heart.internship-rating
-                  span.glyphicon.glyphicon-heart.internship-rating
-                  span.glyphicon.glyphicon-heart.internship-rating
-                  span.glyphicon.glyphicon-heart.internship-rating
-                  span.glyphicon.glyphicon-heart.internship-rating
-                  span.glyphicon.glyphicon-heart.internship-rating
-              tr
-                td.col-md-6.col-lg-6.col-sm-6.rating-content Overall
-                td.col-md-6.col-lg-6.col-sm-6.rating-content
-                  span.glyphicon.glyphicon-heart.internship-rating
-                  span.glyphicon.glyphicon-heart.internship-rating
-                  span.glyphicon.glyphicon-heart.internship-rating
-                  span.glyphicon.glyphicon-heart.internship-rating
-                  span.glyphicon.glyphicon-heart.internship-rating
-                  span.glyphicon.glyphicon-heart.internship-rating
-  section.copyright-wrapper
-    .copyright © 2011 SKE09 All Rights Reserved
-  script(src='/assets/js/jquery.js')
-  script(src='/assets/js/bootstrap.min.js')
+            .col-md-12.col-lg-12.panel-grey.tags-row
+              .panel.rating-panel.panel-grey
+                .panel-body.rating-header Average of 6 ratings
+                table.col-md-12.col-lg-12.col-sm-12.rating-table
+                  tr(ng-repeat='rating in place_rating')
+                    td.col-md-6.col-lg-6.col-sm-6.rating-content {{rating.name}}
+                    td.col-md-6.col-lg-6.col-sm-6.rating-content
+                      span.glyphicon.glyphicon-heart.internship-rating
+                      span.glyphicon.glyphicon-heart.internship-rating
+                      span.glyphicon.glyphicon-heart.internship-rating
+                      span.glyphicon.glyphicon-heart.internship-rating
+                      span.glyphicon.glyphicon-heart.internship-rating
+                      span.glyphicon.glyphicon-heart.internship-rating

@@ -152,11 +152,14 @@
 	border-radius: 20px;
 }
 .tags-row{
-	margin: 0 0 20 0;
+	margin-bottom: 20px;
 	padding-bottom: 20px;
 }
 .tags-panel{
 	padding-bottom: 40px;
+}
+.short-review{
+	margin-bottom: 20px;
 }
 .rating-content{
 	padding: 10px;
@@ -190,4 +193,10 @@
 .form-place-google-maps{
 	font-size: 15px;
 	height: 220px;
+}
+.path{
+	display: block;
+}
+#website{
+	padding-right: 10px;
 }
