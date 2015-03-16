@@ -29,6 +29,7 @@ schema
   t.float('longitude')
   t.text('about')
   t.string('website_url')
+  t.integer('file_id').unsigned().references('id').inTable('files')
 })
 
 .createTable('reviews', function(t) {

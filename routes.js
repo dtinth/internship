@@ -62,19 +62,40 @@ exports.install = function(router) {
 	 * GET single internship place by internship id
      */
 	router.get('/api/places/:id' , function*(next) {
-		this.body = "get internships with id :" + this.params.id;
+	//	this.body = "get internships with id :" + this.params.id;
+		var place_by_id = db.select().from('places').join('files','files.id','places.file_id').where('places.id', this.params.id);
+		var place_by_id_result = yield place_by_id.exec(function(err, rows) {
+			if (err) return console.error(err);
+		})
+
+		var reviews = db.select().from(function() {
+			this.select('url','students.id').from('students').join('files', 'students.file_id', 'files.id').as('gg')
+		}).join('reviews', 'reviews.reviewer_id', 'gg.id').as('students_reviews')
+		
+		var reviews_result = yield reviews.exec(function(err, rows) {
+			if (err) return console.error(err);
+		})
+
+		this.body = { 'places' : place_by_id_result[0], 'reviews' : reviews_result }; 
 	});
+	
 
 	/*
 	 * GET all internship review objects
-     */
-	router.get('/api/review/:id' , function*(next) {
-		this.body = "get review with id : " + this.params.id;
+     	*/
+	router.get('/api/reviews/:id' , function*(next) {
+		
+		var review_by_id = db.select().from('reviews').where('id', this.params.id)
+		var review_by_id_result = yield review_by_id.exec(function(err, rows) {
+			if (err) return console.error(err)
+		})
+			
+		this.body =  review_by_id_result[0]
 	});
 
 	/*
 	 * GET all filter objects
-     */
+     	*/
 	router.get('/api/filter', function*(next) {
 		this.body = "get all internships";
 	});
@@ -83,8 +104,31 @@ exports.install = function(router) {
 	 * POST create review
 	 * FIELD : summary(string), detail(string), start(date), finish(date), position(string), is_admin(bit), reviewer_id(int), place_id(int)
      */
-	router.post('/api/review/' , function*(next) {
-		this.body = this.request.body;
+	router.post('/api/reviews' , function*(next) {
+		var queryString = request.querystring;
+
+		this.body = queryString;
+	});
+
+
+	router.get('/api/reviews', function*(next) {
+		var query = this.request.query; 
+		if(query.place_id == undefined) {
+			var all_reviews =  db.select().from('reviews');
+			var all_reviews_results = yield all_reviews.exec(function(err, rows) {
+				if(err) return console.log(err)
+			})
+			this.body = all_reviews_results
+		}
+		else {
+			var reviews_by_place_id = db.select().from('reviews').where('place_id', query.place_id)
+			var reviews_by_place_id_result = yield reviews_by_place_id.exec(function(err, rows) {
+				if(err) return console.log(err)
+			})
+			this.body = reviews_by_place_id_result
+
+		}
+
 	});
 	
 }
