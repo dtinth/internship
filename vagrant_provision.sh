@@ -5,7 +5,7 @@ sed -ie 's/us\.archive\.ubuntu\.com/mirror1.ku.ac.th/' /etc/apt/sources.list
 
 # update APT
 apt-get update
-apt-get install cowsay
+apt-get install -y cowsay
 
 # installing build tools
 cowsay Installing Build Tools
