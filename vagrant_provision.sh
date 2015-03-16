@@ -9,7 +9,7 @@ apt-get install -y cowsay
 
 # installing build tools
 /usr/games/cowsay Installing Build Tools
-apt-get install -y build-essential
+apt-get install -y build-essential git-core
 
 # install MySQL
 # http://unix.stackexchange.com/questions/147261/installing-mysql-server-in-vagrant-bootstrap-shell-script-how-to-skip-setup
