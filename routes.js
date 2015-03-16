@@ -130,6 +130,24 @@ exports.install = function(router) {
 		}
 
 	});
+
+
+	router.get('/api/tags', function*(next) { 
+		var tag_categories = db.select('name').from('tag_categories').orderBy('order')
+		var tag_categories_result = yield tag_categories.exec(function(err,rows) {
+			if(err) return console.log(err)
+		})
+
+		var tags = db.select().from('tags')
+		var tags_result = yield tags.exec(function(err, rows) {
+			if(err) return console.log(err)		
+		})
+
+		//filter
+		var filter = ""; 
+		this.body = { 'tagCategories' : tag_categories_result, 'tags' : tags_result }
+
+	});
 	
 }
 
