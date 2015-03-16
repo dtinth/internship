@@ -22,7 +22,7 @@ angular.module('internship', [])
       check()
     }
     Login.login = function() {
-      window.open(CONFIG.server + '/login', '_blank', 'dialog=true,width=640,height=360')
+      window.open(CONFIG.server + '/login', '_blank', 'dialog=true,width=640,height=480')
       window.addEventListener('message', function(event) {
         if (event.data[0] != 'token') return
         if (event.origin != CONFIG.server) {

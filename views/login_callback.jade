@@ -2,13 +2,53 @@ doctype html
 html
   head
     title Please wait
+    style.
+      body {
+        background: #333435;
+        color: #c6cccf;
+        font: 18px Helvetica, sans-serif;
+      }
+      .main {
+        position: absolute;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        -webkit-transform: translate(-50%, -50%);
+        text-align: center;
+        text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
+      }
+      .main h1 {
+        font-size: 20px;
+        margin: 0;
+      }
+      .main p {
+        margin: 8px 0 0;
+        opacity: 0.4;
+      }
   body
-    h1 Please wait
+    .main
+      h1 …Verifying Credentials…
+      p#status Just a moment!
     script.
       ;(function() {
-        var token = !{JSON.stringify(token)};
-        window.opener.postMessage(['token', token], '*')
-        window.addEventListener('message', function(event) {
-          if (event.data[0] == 'loginOK') window.close()
+        var code = !{JSON.stringify(code)};
+        function verifyCredentials(code, callback) {
+          var xh = new XMLHttpRequest()
+          var url = '/login/verify?code=' + encodeURIComponent(code)
+          xh.open('POST', url, true)
+          xh.onload = function() {
+            var data = JSON.parse(xh.responseText)
+            if (data.token) callback(data.token)
+          }
+          xh.send('')
+        }
+        window.onerror = function() {
+          document.querySelector('#status').innerHTML = 'Something is wrong...'
+        }
+        verifyCredentials(code, function(token) {
+          document.querySelector('#status').innerHTML = 'Hang in there, Joan!'
+          window.opener.postMessage(['token', token], '*')
+          window.addEventListener('message', function(event) {
+            if (event.data[0] == 'loginOK') window.close()
+          })
         })
       })()

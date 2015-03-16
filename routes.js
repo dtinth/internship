@@ -35,14 +35,21 @@ exports.install = function(router) {
    * GET /login/callback
    */
   router.get('/login/callback', function*(next) { 
+    var locals = { code: this.request.query.code }
+    yield this.render('login_callback', locals)
+  })
+
+  /*
+   * POST /login/verify
+   */
+  router.post('/login/verify', function*(next) { 
     var user    = yield KULogin.check(this.request.query.code)
     var info    = yield KUName.getKUInfo(user.replace(/^b/, ''))
     if (info.major != 'E17' && info.major != 'E09') {
       throw new Error('Student is not in allowed major!')
     }
     var token   = WebToken.sign(user)
-    var locals  = { user: user, token: token, info: info }
-    yield this.render('login_callback', locals)
+    this.body = { token: token }
   })
 
   /*
