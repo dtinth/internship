@@ -4,6 +4,11 @@ html
     title Please wait
   body
     h1 Please wait
-    p= user
-    p= token
-    p= JSON.stringify(info)
+    script.
+      ;(function() {
+        var token = !{JSON.stringify(token)};
+        window.opener.postMessage(['token', token], '*')
+        window.addEventListener('message', function(event) {
+          if (event.data[0] == 'loginOK') window.close()
+        })
+      })()

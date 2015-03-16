@@ -4,9 +4,9 @@ var koaBody = require('koa-body')({ multipart: true });
 var fs = require('fs')
 var crypto = require('crypto')
 
-var KULogin   = require('./lib/ku-login')
-var KUName    = require('./lib/ku-name')
-var WebToken  = require('./lib/web-token')
+var KULogin         = require('./lib/ku-login')
+var KUName          = require('./lib/ku-name')
+var WebToken        = require('./lib/web-token')
 
 exports.install = function(router) {
   /*
@@ -21,6 +21,14 @@ exports.install = function(router) {
    */
   router.get('/login', function*(next) { 
     this.redirect(KULogin.getURL('http://localhost:8001/login/callback'))
+  })
+
+  /*
+   * GET me
+   */
+  router.get('/me', function*(next) { 
+    var username = yield this.getLoggedInUser()
+    this.body = { name: username, username: username }
   })
 
   /*

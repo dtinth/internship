@@ -45,10 +45,14 @@ mixin navbar
               span.sr-only (current)
           li
              a(href='overseas') Overseas
-        ul.nav.navbar-nav.navbar-right
+        ul.nav.navbar-nav.navbar-right(ng-controller='LoginController')
           form.navbar-form.navbar-left(role='search')
             .input-group.nav-search-group
               input.form-control.nav-search-input(type='text', placeholder='Find Internship')
               span.input-group-btn
                 button.btn.btn-grey-to-white(type='button')
                   span.glyphicon.glyphicon-search.nav-search-btn
+          li(ng-if='Login.isLoggedIn')
+             a(href='javascript://' ng-click='Login.logout()') Logout ({{Login.user.name}})
+          li(ng-if='!Login.isLoggedIn')
+             a(href='javascript://' ng-click='Login.login()') Login

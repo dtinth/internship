@@ -7,6 +7,60 @@ $("input[type='file']").change(function(){
 })    
 
 angular.module('internship', [])
+.value('CONFIG', {
+  server: 'http://localhost:8001'
+})
+.factory('Login', [
+  '$http', '$rootScope', 'CONFIG',
+  function($http, $rootScope, CONFIG) {
+    var Login = { }
+    Login.isLoggedIn = false
+    Login.accessToken = localStorage.accessToken
+    Login.logout = function() {
+      delete Login.accessToken
+      delete localStorage.accessToken
+      check()
+    }
+    Login.login = function() {
+      window.open(CONFIG.server + '/login', '_blank', 'dialog=true,width=640,height=360')
+      window.addEventListener('message', function(event) {
+        if (event.data[0] != 'token') return
+        if (event.origin != CONFIG.server) {
+          var message = 'Wrong login origin detected\n' +
+            'Expected: ' + CONFIG.server + '\n' +
+            'Actual: ' + event.origin
+          alert(message)
+          throw new Error(message)
+        }
+        localStorage.accessToken = Login.accessToken = event.data[1]
+        check().then(function() {
+          event.source.postMessage(['loginOK'], '*')
+        })
+      })
+    }
+    function check() {
+      if (!Login.accessToken) {
+        Login.isLoggedIn = false
+        return
+      }
+      var url = CONFIG.server + '/me?access_token=' + Login.accessToken
+      return $http.get(url).then(function(data) {
+        Login.isLoggedIn = true
+        Login.user = data.data
+      }).catch(function() {
+        Login.isLoggedIn = false
+      })
+    }
+    check()
+    return Login
+  }
+])
+.controller('LoginController', [
+  '$scope', 'Login',
+  function($scope, Login) {
+    $scope.Login = Login
+  }
+])
 .controller('PlacesController', [
   '$scope',
   function($scope) {

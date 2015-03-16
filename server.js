@@ -15,6 +15,7 @@ app
   .use(views(__dirname + '/views', { default: 'jade' }))
   .use(json())
   .use(cors())
+  .use(require('./lib/authentication').middleware())
   .use(router.routes())
   .use(router.allowedMethods())
 
