@@ -5,7 +5,7 @@ var fs = require('fs')
 var crypto = require('crypto')
 
 var KULogin         = require('./lib/ku-login')
-var KUName          = require('./lib/ku-name')
+var Students        = require('./lib/students')
 var WebToken        = require('./lib/web-token')
 
 exports.install = function(router) {
@@ -27,8 +27,7 @@ exports.install = function(router) {
    * GET me
    */
   router.get('/me', function*(next) { 
-    var username = yield this.getLoggedInUser()
-    this.body = { name: username, username: username }
+    this.body = yield this.getLoggedInUser()
   })
 
   /*
@@ -43,22 +42,12 @@ exports.install = function(router) {
    * POST /login/verify
    */
   router.post('/login/verify', function*(next) { 
-    var user    = yield KULogin.check(this.request.query.code)
-    var info    = yield KUName.getKUInfo(user.replace(/^b/, ''))
-    if (info.major != 'E17' && info.major != 'E09') {
-      throw new Error('Student is not in allowed major!')
-    }
-    var token   = WebToken.sign(user)
+    var nontriUsername = yield KULogin.check(this.request.query.code)
+    var userId  = yield Students.loginOrRegister(nontriUsername)
+    var token   = WebToken.sign(userId)
     this.body = { token: token }
   })
 
-  /*
-   * POST login
-   */
-  router.post('/login', function*(next) { 
-    this.body = "posted";
-  })
- 
   /*
    * GET all internship places objects
    */

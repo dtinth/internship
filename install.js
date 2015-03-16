@@ -12,9 +12,10 @@ schema
 
 .createTable('students', function(t) {
   t.increments()
-  t.string('student_id', 12)
+  t.string('student_id', 12).unique()
   t.string('name').nullable()
   t.string('nickname').nullable()
+  t.string('major').nullable()
   t.string('contact_url').nullable()
   t.integer('file_id').unsigned().references('id').inTable('files')
   t.boolean('is_admin')
