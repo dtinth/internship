@@ -4,12 +4,37 @@ var koaBody = require('koa-body')({ multipart: true });
 var fs = require('fs')
 var crypto = require('crypto')
 
+var KULogin   = require('./lib/ku-login')
+var KUName    = require('./lib/ku-name')
+var WebToken  = require('./lib/web-token')
+
 exports.install = function(router) {
   /*
    * GET user
    */
   router.get('/users', function*(next) {
     this.body = yield this.render('index');
+  })
+
+  /*
+   * GET login
+   */
+  router.get('/login', function*(next) { 
+    this.redirect(KULogin.getURL('http://localhost:8001/login/callback'))
+  })
+
+  /*
+   * GET /login/callback
+   */
+  router.get('/login/callback', function*(next) { 
+    var user    = yield KULogin.check(this.request.query.code)
+    var info    = yield KUName.getKUInfo(user.replace(/^b/, ''))
+    if (info.major != 'E17' && info.major != 'E09') {
+      throw new Error('Student is not in allowed major!')
+    }
+    var token   = WebToken.sign(user)
+    var locals  = { user: user, token: token, info: info }
+    yield this.render('login_callback', locals)
   })
 
   /*

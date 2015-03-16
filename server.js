@@ -2,7 +2,7 @@
 var app = require('koa')()
 var router = require('koa-router')()
 var json = require('koa-json')
-var views = require('koa-render')
+var views = require('koa-views')
 var routes = require('./routes')
 var serve = require('koa-static')
 var cors = require('koa-cors')
@@ -12,7 +12,7 @@ routes.install(router)
 
 app
   .use(serve(__dirname + '/static'))
-  .use(views(__dirname + '/views', 'jade'))
+  .use(views(__dirname + '/views', { default: 'jade' }))
   .use(json())
   .use(cors())
   .use(router.routes())
