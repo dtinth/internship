@@ -20,7 +20,8 @@ exports.install = function(router) {
    * GET login
    */
   router.get('/login', function*(next) { 
-    this.redirect(KULogin.getURL('http://localhost:8001/login/callback'))
+    var SELF_BASE = 'http://localhost:8001'
+    this.redirect(KULogin.getURL(SELF_BASE + '/login/callback'))
   })
 
   /*

@@ -53,6 +53,6 @@ mixin navbar
                 button.btn.btn-grey-to-white(type='button')
                   span.glyphicon.glyphicon-search.nav-search-btn
           li(ng-if='Login.isLoggedIn')
-             a(href='javascript://' ng-click='Login.logout()') Logout ({{Login.user.name}})
+             a(href='javascript://' ng-click='Login.logout()') Logout ({{Login.user.name}} {{identifyGeneration(Login.user)}})
           li(ng-if='!Login.isLoggedIn')
              a(href='javascript://' ng-click='Login.login()') Login

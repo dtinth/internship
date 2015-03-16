@@ -59,6 +59,13 @@ angular.module('internship', [])
   '$scope', 'Login',
   function($scope, Login) {
     $scope.Login = Login
+    $scope.identifyGeneration = function(user) {
+      if (user.major == 'SKE') {
+        return 'SKE' + (user.substr(0, 2) - 45)
+      } else {
+        return 'CPE' + (user.substr(0, 2) - 29)
+      }
+    }
   }
 ])
 .controller('PlacesController', [
