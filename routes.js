@@ -1,6 +1,9 @@
 var db = require('./db')
 var schema = db.schema
 var koaBody = require('koa-body')({ multipart: true });
+var fs = require('fs')
+var crypto = require('crypto')
+
 exports.install = function(router) {
   /*
    * GET user
@@ -148,7 +151,16 @@ exports.install = function(router) {
   });
   
   router.post('/files', koaBody, function *(next) {
-    console.log(this.request.body)
+    var reqbody = this.request.body
+    var file = fs.readFileSync(reqbody.files.file.path)
+    var sha256 = crypto.createHash("sha256");
+    sha256.update(file, 'utf-8')
+    var result = sha256.digest("hex");
+    
+    fs.rename(reqbody.files.file.path, __dirname + '/files/' + result,function (err) {
+      if (err) throw err;
+      console.log('renamed complete');
+    })
     this.body = JSON.stringify(this.request.body)
   });
 }
