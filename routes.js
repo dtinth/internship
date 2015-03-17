@@ -6,10 +6,14 @@ var crypto = require('crypto')
 
 exports.install = function(router) {
   /*
-   * GET user
+   * GET student
    */
-  router.get('/users', function*(next) {
-    this.body = yield this.render('index');
+  router.get('/api/students/:id', function*(next) {
+    var students = db.select().from('students').where('id',this.params.id);
+    var students_result = yield students.exec(function(err,rows) {
+      if(err) console.error(err)
+    })
+    this.body = students_result[0]
   })
 
   /*
@@ -44,7 +48,7 @@ exports.install = function(router) {
     });
     var reviews = db.select().from('reviews')
     var reviews_result = yield reviews.exec(function(err, rows) {
-      if (err) return console.log(err);
+      if (err) return console.error(err);
     })
 
     for(var i = places_result.length - 1; i >= 0; --i) {
@@ -111,7 +115,7 @@ exports.install = function(router) {
     if(query.place_id != undefined) {
       var reviews_by_place_id = db.select().from('reviews').where('place_id', query.place_id)
       var reviews_by_place_id_result = yield reviews_by_place_id.exec(function(err, rows) {
-        if(err) return console.log(err)
+        if(err) return console.error(err)
       })
       for(var i = reviews_by_place_id_result.length - 1 ; i >= 0 ; --i) {
         reviews_by_place_id_result[i].ratings = ratings_result.filter(function(rating) {
@@ -125,7 +129,7 @@ exports.install = function(router) {
     else {
       var all_reviews =  db.select().from('reviews');
       var all_reviews_results = yield all_reviews.exec(function(err, rows) {
-        if(err) return console.log(err)
+        if(err) return console.error(err)
       })
       
       for(var i = all_reviews_results.length - 1 ; i >= 0 ; --i) {
@@ -148,12 +152,12 @@ exports.install = function(router) {
     router.get('/api/tags', function*(next) { 
       var tag_categories = db.select('id','name').from('tag_categories').orderBy('order')
       var tag_categories_result = yield tag_categories.exec(function(err,rows) {
-        if(err) return console.log(err)
+        if(err) return console.error(err)
       })
 
       var tags = db.select('tag_category_id','value').from('tags')
       var tags_result = yield tags.exec(function(err, rows) {
-        if(err) return console.log(err)    
+        if(err) return console.error(err)    
       })
 
       for (var i = tag_categories_result.length - 1; i >= 0; --i) {
