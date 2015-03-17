@@ -21,6 +21,7 @@ exports.seed = co.wrap(function*(knex) {
     { tag_category_id: 1, value: 'Germany' },
     { tag_category_id: 1, value: 'Japan' },
     { tag_category_id: 1, value: 'Korea' },
+    { tag_category_id: 1, value: 'Thailand' },
 
     { tag_category_id: 2, value: 'Paid' },
     { tag_category_id: 2, value: 'Non-Paid' },
