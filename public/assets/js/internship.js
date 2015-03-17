@@ -6,10 +6,16 @@ $("input[type='file']").change(function(){
    $('#img-path').text(this.value.replace(/C:\\fakepath\\/i, ''))
 })    
 
-angular.module('internship', [])
+angular.module('internship', ['internship.api'])
+.controller('LoginController', [
+  '$scope', 'Login',
+  function($scope, Login) {
+    $scope.Login = Login
+  }
+])
 .controller('PlacesController', [
-  '$scope',
-  function($scope) {
+  '$scope', 'Places',
+  function($scope, Places) {
     $scope.places_in_thailand = [
       {
         "place_id": 1,
@@ -38,34 +44,9 @@ angular.module('internship', [])
         "website_url": "www.Lnwshop.com"
       }
     ]
-    $scope.places_in_overseas = [
-      {
-        "place_id": 1,
-        "name": "Kookmin U.",
-        "rating": 4,
-        "review_count": 6,
-        "id": 1,
-        "full_name": "Kookmin University",
-        "address": "Seoul, South Korea",
-        "latitude": 1.1,
-        "longitude": 1.1,
-        "about": "about KMU",
-        "website_url": "www.kookmin.ac.kr"
-      },
-      {
-        "place_id": 2,
-        "name": "NAIST",
-        "rating": 5,
-        "review_count": 3,
-        "id": 1,
-        "full_name": "NAIST",
-        "address": "Japan",
-        "latitude": 1.1,
-        "longitude": 1.1,
-        "about": "about NAIST",
-        "website_url": "www.aaa.com"
-      }
-    ]
+    Places.all().then(function(places) {
+      $scope.places = places
+    })
     $scope.filters = [
       {
         title: 'Paid',
