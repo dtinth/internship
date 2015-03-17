@@ -24,6 +24,24 @@ html
         margin: 8px 0 0;
         opacity: 0.4;
       }
+      body.error {
+        color: #fcc;
+        background: #744;
+      }
+      body:not(.error) .main p {
+        animation: 4s infinite blink;
+        -webkit-animation: 4s infinite blink linear;
+      }
+      @keyframes blink {
+        0% { opacity: 0.1; }
+        50% { opacity: 0.5; }
+        100% { opacity: 0.1; }
+      }
+      @-webkit-keyframes blink {
+        0% { opacity: 0.1; }
+        50% { opacity: 0.5; }
+        100% { opacity: 0.1; }
+      }
   body
     .main
       h1 …Verifying Credentials…
@@ -43,6 +61,7 @@ html
         }
         window.onerror = function() {
           document.querySelector('#status').innerHTML = 'Something is wrong...'
+          document.body.classList.add('error')
         }
         verifyCredentials(code, function(token) {
           document.querySelector('#status').innerHTML = 'Hang in there, Joan!'
