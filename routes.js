@@ -4,13 +4,22 @@ var koaBody = require('koa-body')({ multipart: true });
 var fs = require('fs')
 var crypto = require('crypto')
 
-var KULogin         = require('./lib/ku-login')
-var Students        = require('./lib/students')
-var WebToken        = require('./lib/web-token')
+var KULogin   = require('./lib/ku-login')
+var Students  = require('./lib/students')
+var WebToken  = require('./lib/web-token')
+var Promise   = require('bluebird')
 
 exports.install = function(router) {
-  /*
-   * GET student
+
+  /**
+   * GET /api/students/{id}
+   * Returns the student's info.
+   * ---
+   * parameters:
+   *  - { name: id, in: path, type: integer,
+   *      description: 'User ID in the database.' }
+   * responses:
+   *  200: { description: 'The student info.' }
    */
   router.get('/api/students/:id', function*(next) {
     var students = []; 
@@ -22,16 +31,27 @@ exports.install = function(router) {
     this.body = students[0];
   })
 
-  /*
-   * GET login
+  /**
+   * GET /login
+   * Redirects user to login page.
+   * ---
+   * responses:
+   *  302: { description: 'Redirection to login page.' }
    */
   router.get('/login', function*(next) { 
     var SELF_BASE = 'http://localhost:8001'
     this.redirect(KULogin.getURL(SELF_BASE + '/login/callback'))
   })
 
-  /*
-   * GET me
+  /**
+   * GET /me
+   * Returns the authenticated user's information.
+   * ---
+   * parameters:
+   *  - { name: access_token, type: string, in: query,
+   *      description: 'The access_token obtained from logging in' }
+   * responses:
+   *  200: { description: "Authenticated user's information" }
    */
   router.get('/me', function*(next) { 
     this.body = yield this.getLoggedInUser()
@@ -55,8 +75,12 @@ exports.install = function(router) {
     this.body = { token: token }
   })
 
-  /*
-   * GET all internship places objects
+  /**
+   * GET /api/places
+   * Returns all available internship places.
+   * ---
+   * responses:
+   *  200: { description: "An array of internship places." }
    */
   router.get('/api/places' , function*(next) {	
     // var places = db.select().from(function() {
@@ -94,8 +118,14 @@ exports.install = function(router) {
     this.body = places
   });
   
-  /*
-   * GET single internship place by internship id
+  /**
+   * GET /api/places/{id}
+   * Retrives the information about one internship place.
+   * ---
+   * parameters:
+   *  - { name: id, in: path, type: integer, description: 'The place ID' }
+   * responses:
+   *  200: { description: "The info about internship place." }
    */
   router.get('/api/places/:id' , function*(next) {
   //  this.body = "get internships with id :" + this.params.id;
@@ -109,9 +139,14 @@ exports.install = function(router) {
     this.body = place_by_id[0]; 
   });
  
-
-  /*
-   * GET all internship review objects
+  /**
+   * GET /api/reviews/{id}
+   * Retrives a review information.
+   * ---
+   * parameters:
+   *  - { name: id, in: path, type: integer, description: 'The review ID.' }
+   * responses:
+   *  200: { description: "Detailed review information." }
    */
   router.get('/api/reviews/:id' , function*(next) {
     
@@ -125,10 +160,29 @@ exports.install = function(router) {
     this.body =  review_by_id[0]
   });
 
-  
-  /*
-   * POST create review
-   * FIELD : summary(string), detail(string), start(date), finish(date), position(string), is_admin(bit), reviewer_id(int), place_id(int)
+  /**
+   * POST /api/reviews
+   * Creates a review.
+   * ---
+   * parameters:
+   *  - { name: summary, in: formData, type: string,
+   *      description: 'Review summary in less than 140 characters.' }
+   *  - { name: detail, in: formData, type: string,
+   *      description: 'Detailed review.' }
+   *  - { name: start, in: formData, type: string,
+   *      description: 'Start date.' }
+   *  - { name: finish, in: formData, type: string,
+   *      description: 'Finish date.' }
+   *  - { name: position, in: formData, type: string,
+   *      description: 'Position' }
+   *  - { name: is_admin, in: formData, type: string,
+   *      description: 'Is admin? What is this?!!' }
+   *  - { name: place_id, in: formData, type: integer,
+   *      description: 'The place ID this review belongs to.' }
+   *  - { name: access_token, in: formData, type: string,
+   *      description: 'The access token of the logged in user.' }
+   * responses:
+   *  200: { description: "Review is created." }
    */
   router.post('/api/reviews', koaBody , function*(next) {
     var requestBody = this.request.body
@@ -184,7 +238,6 @@ exports.install = function(router) {
     }
     this.body = message 
   });
-
 
   router.get('/api/reviews', function*(next) {
     var query = this.request.query;
@@ -292,5 +345,60 @@ exports.install = function(router) {
       if(insert == undefined) this.body = "cannot insert";
       else this.body = insert[0];
     });
+
+  /**
+   * GET /swagger.json
+   * Returns an API documentation in Swagger.io format.
+   * ---
+   * responses:
+   *  200: { description: 'The API description in Swagger.io format' }
+   */
+  var swagger = (function() {
+    var yaml = require('js-yaml')
+    var assign = require('object-assign')
+    var code = fs.readFileSync(module.filename, 'utf-8')
+    var swagger = {
+      swagger: '2.0',
+      info: { title: 'Internship', version: '0.0' },
+      paths: { }
+    }
+    var comments = code.match(/\/\*\*(?:[^\*]|\*[^\/])*\*\//g)
+        .map(function(x) {
+          return x
+            .replace(/^\/\*\*|\*\/$/g, '')
+            .replace(/^[ \t]*\*[ ]/mg, '')
+            .trim()
+        })
+    var paths = comments
+        .map(function(x) {
+          var match = /^(GET|POST|DELETE|PUT|PATCH)\s+(\/[\S+]+)\s+([\s\S]*?)---([\s\S]*)$/.exec(x)
+          if (match) {
+            return {
+              method: match[1],
+              path: match[2],
+              operation: assign({ summary: match[3] }, yaml.safeLoad(match[4]))
+            }
+          } else {
+            return null
+          }
+        })
+        .filter(function(x) { return x != null })
+    paths.forEach(function(pathItem) {
+      var pathname = pathItem.path
+      var method = pathItem.method.toLowerCase()
+      var path = swagger.paths[pathname] || (swagger.paths[pathname] = { })
+      path[method] = pathItem.operation
+    })
+    return swagger
+  })()
+  router.get('/swagger.json', function*(next) {
+    this.body = swagger
+  })
+
 }
+
+
+
+
+
 
