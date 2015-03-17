@@ -8,14 +8,16 @@ var serve = require('koa-static')
 var cors = require('koa-cors')
 var koaBody = require('koa-body')()
 
-//before
-app.use(serve(__dirname+'/public'))
-app.use(views('./public','jade'))
 routes.install(router)
 
-//after
-app.use(json())
-   .use(cors())
-   .use(router.routes())
-   .use(router.allowedMethods())
-app.listen(8001)
+app
+  .use(serve(__dirname + '/static'))
+  .use(views(__dirname + '/views', 'jade'))
+  .use(json())
+  .use(cors())
+  .use(router.routes())
+  .use(router.allowedMethods())
+
+app.listen(8001, function() {
+  console.log('Listening on port', this.address().port)
+})
