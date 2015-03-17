@@ -7,36 +7,36 @@ var crypto = require('crypto')
 exports.install = function(router) {
   /*
    * GET user
-     */
+   */
   router.get('/users', function*(next) {
     this.body = yield this.render('index');
   })
 
   /*
    * POST login
-     */
+   */
   router.post('/login', function*(next) { 
     this.body = "posted";
   })
-  
+ 
   /*
    * GET all internship places objects
-     */
+   */
   router.get('/api/places' , function*(next) {
-     var places = db.select().from(function() {
-             this.column('reviews_ratings.place_id', 'rating_categories.name')
-                .avg('reviews_ratings.score as avg_rating').count('rating_categories.name as review_count')
-                  .from(function() {
-                     this.column('ratings.rating_category_id','ratings.score','reviews.place_id')
-                       .from('reviews')
-                         .join('ratings', 'reviews.id', 'ratings.review_id').as('reviews_ratings')
-                 })
-                   .join('rating_categories', 'rating_categories.id', 'reviews_ratings.rating_category_id')
-                     .groupBy('rating_categories.name')
-                       .as('reviews_score')
-           })
-             .join('places', 'places.id', 'reviews_score.place_id').where('reviews_score.name','overall')
-               .as('places_api')
+  	var places = db.select().from(function() {
+        this.column('reviews_ratings.place_id', 'rating_categories.name')
+        	.avg('reviews_ratings.score as avg_rating').count('rating_categories.name as review_count')
+                .from(function() {
+                    this.column('ratings.rating_category_id','ratings.score','reviews.place_id')
+                    .from('reviews')
+                        .join('ratings', 'reviews.id', 'ratings.review_id').as('reviews_ratings')
+                })
+                .join('rating_categories', 'rating_categories.id', 'reviews_ratings.rating_category_id')
+                    .groupBy('rating_categories.name')
+                    .as('reviews_score')
+        	})
+            .join('places', 'places.id', 'reviews_score.place_id').where('reviews_score.name','overall')
+            .as('places_api')
     var places_result = yield places.exec(function(err, rows) {
       if (err) return console.error(err);
       //console.log(rows)
@@ -46,7 +46,7 @@ exports.install = function(router) {
   
   /*
    * GET single internship place by internship id
-     */
+   */
   router.get('/api/places/:id' , function*(next) {
   //  this.body = "get internships with id :" + this.params.id;
     var place_by_id = db.select().from('places').join('files','files.id','places.file_id').where('places.id', this.params.id);
@@ -60,7 +60,7 @@ exports.install = function(router) {
 
   /*
    * GET all internship review objects
-       */
+   */
   router.get('/api/reviews/:id' , function*(next) {
     
     var review_by_id = db.select().from('reviews').where('id', this.params.id)
@@ -75,7 +75,7 @@ exports.install = function(router) {
   /*
    * POST create review
    * FIELD : summary(string), detail(string), start(date), finish(date), position(string), is_admin(bit), reviewer_id(int), place_id(int)
-     */
+   */
   router.post('/api/reviews' , function*(next) {
     var queryString = request.querystring;
 
@@ -126,15 +126,18 @@ exports.install = function(router) {
     
     });
 
-    
+    /*
+     * POST /files handle file upload to store in temp and move to local file storage with hased name
+     */
     router.post('/files', koaBody, function *(next) {
       var reqbody = this.request.body
       var file = fs.readFileSync(reqbody.files.file.path)
+      var filetype = reqbody.files.file.name.substring(reqbody.files.file.name.lastIndexOf('.'),reqbody.files.file.name.length)
       var sha256 = crypto.createHash("sha256");
       sha256.update(file, 'utf-8')
       var result = sha256.digest("hex");
     
-      fs.rename(reqbody.files.file.path, __dirname + '/files/' + result,function (err) {
+      fs.rename(reqbody.files.file.path, __dirname + '/files/' + result + filetype,function (err) {
       if (err) throw err;
         console.log('renamed complete');
       })
