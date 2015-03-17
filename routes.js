@@ -130,10 +130,59 @@ exports.install = function(router) {
    * POST create review
    * FIELD : summary(string), detail(string), start(date), finish(date), position(string), is_admin(bit), reviewer_id(int), place_id(int)
    */
-  router.post('/api/reviews' , function*(next) {
-    var queryString = request.querystring;
+  router.post('/api/reviews', koaBody , function*(next) {
+    var requestBody = this.request.body
+    var message = ""
+    // data to save
+    var reviewer = requestBody.reviewer_id
+    var place = requestBody.place_id
+    
+    try {
+      hasReviewer = (yield db.select().from('students').where('id', reviewer)).length > 0
+      hasPlace  = (yield db.select().from('places').where('id', place)).length > 0
+      if(hasPlace && hasReviewer) {
+        var insert = yield db('reviews').insert(requestBody);
+        message = insert[0] 
+      }
+      else { 
+        message = "not found reviewer or place" 
+      }
+    } catch (e) {
+      console.error(e)
+      message = "can not save : something is wrong"
+    }
+    this.body = message 
+  });
+  
+  
 
-    this.body = queryString;
+
+
+  /*
+   * POST create place
+   * FIELD :
+   */
+  router.post('/api/places', koaBody , function*(next) {
+    var requestBody = this.request.body
+    var message = ""
+    // data to save
+    var name = requestBody.name
+    var full_name = requestBody.full_name
+    
+    try {
+      hasPlace  = (yield db.select().from('places').where('name',name).orWhere('full_name',full_name)).length > 0
+      if(!hasPlace) {
+        var insert = yield db('places').insert(requestBody);
+        message = insert[0]
+      }
+      else {
+        var message = "place already exists"
+      }
+    } catch (e) {
+      console.error(e)
+      message = "can not save : something is wrong"
+    }
+    this.body = message 
   });
 
 
@@ -234,12 +283,14 @@ exports.install = function(router) {
       if (err) throw err;
       	console.log('renamed complete');
       })
+      var insert;
       try {
-        var insert = yield db('files').insert({url : result+filetype})
+        insert = yield db('files').insert({url : result+filetype})
       } catch(e) {
         console.error(e)
       }
-      this.body = JSON.stringify(this.request.body)
+      if(insert == undefined) this.body = "cannot insert";
+      else this.body = insert[0];
     });
 }
 
