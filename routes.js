@@ -136,11 +136,12 @@ exports.install = function(router) {
       var sha256 = crypto.createHash("sha256");
       sha256.update(file, 'utf-8')
       var result = sha256.digest("hex");
-    
+      //move file into local storage
       fs.rename(reqbody.files.file.path, __dirname + '/files/' + result + filetype,function (err) {
       if (err) throw err;
         console.log('renamed complete');
       })
+      //TODO save path reference into database
       this.body = JSON.stringify(this.request.body)
     });
 }
