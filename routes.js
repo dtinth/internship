@@ -23,20 +23,21 @@ exports.install = function(router) {
    * GET all internship places objects
    */
   router.get('/api/places' , function*(next) {
-  	var places = db.select().from(function() {
-        this.column('reviews_ratings.place_id', 'rating_categories.name')
-        	.avg('reviews_ratings.score as avg_rating').count('rating_categories.name as review_count')
-                .from(function() {
-                    this.column('ratings.rating_category_id','ratings.score','reviews.place_id')
-                    .from('reviews')
-                        .join('ratings', 'reviews.id', 'ratings.review_id').as('reviews_ratings')
-                })
-                .join('rating_categories', 'rating_categories.id', 'reviews_ratings.rating_category_id')
-                    .groupBy('rating_categories.name')
-                    .as('reviews_score')
-        	})
-            .join('places', 'places.id', 'reviews_score.place_id').where('reviews_score.name','overall')
-            .as('places_api')
+  	// var places = db.select().from(function() {
+   //      this.column('reviews_ratings.place_id', 'rating_categories.name')
+   //      	.avg('reviews_ratings.score as avg_rating').count('rating_categories.name as review_count')
+   //              .from(function() {
+   //                  this.column('ratings.rating_category_id','ratings.score','reviews.place_id')
+   //                  .from('reviews')
+   //                      .join('ratings', 'reviews.id', 'ratings.review_id').as('reviews_ratings')
+   //              })
+   //              .join('rating_categories', 'rating_categories.id', 'reviews_ratings.rating_category_id')
+   //                  .groupBy('rating_categories.name')
+   //                  .as('reviews_score')
+   //      	})
+   //          .join('places', 'places.id', 'reviews_score.place_id').where('reviews_score.name','overall')
+   //          .as('places_api')
+    var places = db.select().from('places')
     var places_result = yield places.exec(function(err, rows) {
       if (err) return console.error(err);
       //console.log(rows)
@@ -121,10 +122,9 @@ exports.install = function(router) {
         return tag.tag_category_id = tag_categories_result[i].id
       })
     } 
-    
     this.body = tag_categories_result
     
-    });
+	});
 
     /*
      * POST /files handle file upload to store in temp and move to local file storage with hased name
@@ -139,7 +139,7 @@ exports.install = function(router) {
       //move file into local storage
       fs.rename(reqbody.files.file.path, __dirname + '/files/' + result + filetype,function (err) {
       if (err) throw err;
-        console.log('renamed complete');
+      	console.log('renamed complete');
       })
       //TODO save path reference into database
       this.body = JSON.stringify(this.request.body)
