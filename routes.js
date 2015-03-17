@@ -234,7 +234,11 @@ exports.install = function(router) {
       if (err) throw err;
       	console.log('renamed complete');
       })
-      //TODO save path reference into database
+      try {
+        var insert = yield db('files').insert({url : result+filetype})
+      } catch(e) {
+        console.error(e)
+      }
       this.body = JSON.stringify(this.request.body)
     });
 }
