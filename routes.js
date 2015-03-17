@@ -4,6 +4,10 @@ var koaBody = require('koa-body')({ multipart: true });
 var fs = require('fs')
 var crypto = require('crypto')
 
+var KULogin         = require('./lib/ku-login')
+var Students        = require('./lib/students')
+var WebToken        = require('./lib/web-token')
+
 exports.install = function(router) {
   /*
    * GET user
@@ -13,12 +17,38 @@ exports.install = function(router) {
   })
 
   /*
-   * POST login
+   * GET login
    */
-  router.post('/login', function*(next) { 
-    this.body = "posted";
+  router.get('/login', function*(next) { 
+    var SELF_BASE = 'http://localhost:8001'
+    this.redirect(KULogin.getURL(SELF_BASE + '/login/callback'))
   })
- 
+
+  /*
+   * GET me
+   */
+  router.get('/me', function*(next) { 
+    this.body = yield this.getLoggedInUser()
+  })
+
+  /*
+   * GET /login/callback
+   */
+  router.get('/login/callback', function*(next) { 
+    var locals = { code: this.request.query.code }
+    yield this.render('login_callback', locals)
+  })
+
+  /*
+   * POST /login/verify
+   */
+  router.post('/login/verify', function*(next) { 
+    var nontriUsername = yield KULogin.check(this.request.query.code)
+    var userId  = yield Students.loginOrRegister(nontriUsername)
+    var token   = WebToken.sign(userId)
+    this.body = { token: token }
+  })
+
   /*
    * GET all internship places objects
    */
