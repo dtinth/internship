@@ -37,12 +37,13 @@ exports.install = function(router) {
    //      	})
    //          .join('places', 'places.id', 'reviews_score.place_id').where('reviews_score.name','overall')
    //          .as('places_api')
-    var places = db.select().from('places')
-    var places_result = yield places.exec(function(err, rows) {
-      if (err) return console.error(err);
-      //console.log(rows)
-    });
-    this.body = places_result
+   try {
+		var places = yield db.select().from('places')
+		this.body = places
+   } catch (e) {
+   		console.error(e)
+   }
+	
   });
   
   /*
