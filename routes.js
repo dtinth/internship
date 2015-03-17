@@ -35,30 +35,13 @@ exports.install = function(router) {
                      .groupBy('rating_categories.name')
                        .as('reviews_score')
            })
-             .join('places', 'places.id', 'reviews_score.place_id')
+             .join('places', 'places.id', 'reviews_score.place_id').where('reviews_score.name','overall')
                .as('places_api')
-
-    var tags = db.column('reviews.place_id', 'tag_review.review_id', 'tag_review.tag_id')
-            .from('tag_review')
-              .join('reviews', 'reviews.id', 'tag_review.review_id')
-                .as('review_tag_review')
-    
-    var tag_category_tag = db.select().from('tag_categories').join('tags','tag_categories.id','tags.tag_category_id').as('tag_category_tag')
-
-    //console.log(places.toString())
-    //console.log(tags.toString())
-    //console.log(tag_category_tag.toString())
     var places_result = yield places.exec(function(err, rows) {
       if (err) return console.error(err);
       //console.log(rows)
     });
-    var tags_result = yield tags.exec(function(err,rows) {
-      if (err) return console.error(err);
-    })
-    var tag_category_tag_result = yield tag_category_tag.exec(function(err,rows) {
-      if (err) return console.error(err);
-    })
-    this.body = { "tag_category_tag" : tag_category_tag_result ,"places" : places_result , "tags" : tags_result }
+    this.body = places_result
   });
   
   /*
@@ -71,17 +54,9 @@ exports.install = function(router) {
       if (err) return console.error(err);
     })
 
-    var reviews = db.select().from(function() {
-      this.select('url','students.id').from('students').join('files', 'students.file_id', 'files.id').as('gg')
-    }).join('reviews', 'reviews.reviewer_id', 'gg.id').as('students_reviews')
-    
-    var reviews_result = yield reviews.exec(function(err, rows) {
-      if (err) return console.error(err);
-    })
-
-    this.body = { 'places' : place_by_id_result[0], 'reviews' : reviews_result }; 
+    this.body = place_by_id_result[0] 
   });
-  
+ 
 
   /*
    * GET all internship review objects
@@ -96,12 +71,6 @@ exports.install = function(router) {
     this.body =  review_by_id_result[0]
   });
 
-  /*
-   * GET all filter objects
-       */
-  router.get('/api/filter', function*(next) {
-    this.body = "get all internships";
-  });
   
   /*
    * POST create review
@@ -121,6 +90,8 @@ exports.install = function(router) {
       var all_reviews_results = yield all_reviews.exec(function(err, rows) {
         if(err) return console.log(err)
       })
+
+      var rating = db.select().from('ratings').where('review_id')
       this.body = all_reviews_results
     }
     else {
@@ -135,33 +106,39 @@ exports.install = function(router) {
   });
 
   router.get('/api/tags', function*(next) { 
-    var tag_categories = db.select('name').from('tag_categories').orderBy('order')
+    var tag_categories = db.select('id','name').from('tag_categories').orderBy('order')
     var tag_categories_result = yield tag_categories.exec(function(err,rows) {
       if(err) return console.log(err)
     })
 
-    var tags = db.select().from('tags')
+    var tags = db.select('tag_category_id','value').from('tags')
     var tags_result = yield tags.exec(function(err, rows) {
       if(err) return console.log(err)    
     })
 
-    //filter
-    var filter = ""; 
-    this.body = { 'tagCategories' : tag_categories_result, 'tags' : tags_result }
-  });
-  
-  router.post('/files', koaBody, function *(next) {
-    var reqbody = this.request.body
-    var file = fs.readFileSync(reqbody.files.file.path)
-    var sha256 = crypto.createHash("sha256");
-    sha256.update(file, 'utf-8')
-    var result = sha256.digest("hex");
+    for (var i = tag_categories_result.length - 1; i >= 0; --i) {
+      tag_categories_result[i].tags = tags_result.filter(function(tag) {
+        return tag.tag_category_id = tag_categories_result[i].id
+      })
+    } 
     
-    fs.rename(reqbody.files.file.path, __dirname + '/files/' + result,function (err) {
+    this.body = tag_categories_result
+    
+    });
+
+    
+    router.post('/files', koaBody, function *(next) {
+      var reqbody = this.request.body
+      var file = fs.readFileSync(reqbody.files.file.path)
+      var sha256 = crypto.createHash("sha256");
+      sha256.update(file, 'utf-8')
+      var result = sha256.digest("hex");
+    
+      fs.rename(reqbody.files.file.path, __dirname + '/files/' + result,function (err) {
       if (err) throw err;
-      console.log('renamed complete');
-    })
-    this.body = JSON.stringify(this.request.body)
-  });
+        console.log('renamed complete');
+      })
+      this.body = JSON.stringify(this.request.body)
+    });
 }
 
