@@ -1,11 +1,4 @@
 
-module.exports = require('knex')({
-  client: 'mysql',
-  connection: {
-    host     : 'localhost',
-    user     : 'legacy',
-    password : 'legacy_project',
-    database : 'legacy'
-  }
-})
+var config = require('./knexfile')[process.env.NODE_ENV || 'development']
+module.exports = require('knex')(config)
 
