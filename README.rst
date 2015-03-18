@@ -25,7 +25,7 @@ The frontend will be accessible at ``http://localhost:9000/``.
 
 To connect to backend, there are 2 options.
 
-1. Simply connect to the Backend_.
+1. Simply set up the Backend_. The frontend will connect to it automatically.
 2. Set up a proxy to the production Backend server::
 
       proxy -p 8001 -t 'http://ASK_FOR_IP_ADDERSS_FROM_CHANON:8001/'
