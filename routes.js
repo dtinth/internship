@@ -106,18 +106,23 @@ exports.install = function(router) {
       }).join('reviews','reviews.id','t1.review_id') 
     } catch(e) {
       console.error(e)
-    }
-    places[0].agsdfgasdf = reviews 
+    } 
     for(var i = places.length - 1; i >= 0; --i) {
       var assoc_review =  reviews.filter(function(review){
                 return review.place_id == places[i].id
       })
+      place_tags = []
       assoc_review.forEach(function(review){
-        places[i].tags = tags.filter(function(tag) {
-          return review.id = tag.review_id
-        })
+        place_tags.push(tags.filter(function(tag) {
+          return review.id == tag.review_id
+        }))
       })
-      places[i].reviews = assoc_review
+      place_tags = [].concat.apply([], place_tags)
+      id = []
+      places[i].tags = place_tags.filter(function(element) {
+        id.push(element.tag_id)  
+        return !(element.tag_id in id)
+      })
       places[i].reviews_count = assoc_review.length
     }
      
@@ -155,18 +160,13 @@ exports.install = function(router) {
    *  200: { description: "Detailed review information." }
    */
   router.get('/api/reviews/:id' , function*(next) {
-    var tags = [];
+    var tags = [],review_by_id = [];
     try { 
       tags = yield db.select('tags.id','tags.tag_category_id').from('tag_review').join('tags','tags.id','tag_review.tag_id')
-    } catch(e) {
-      console.error(e)
-    } 
-    var review_by_id = [];
-    try {
       review_by_id = yield db.select().from('reviews').where('id', this.params.id)
     } catch(e) {
       console.error(e)
-    }
+    } 
     review_by_id[0].tags = tags 
     this.body =  review_by_id[0]
   });
@@ -252,23 +252,12 @@ exports.install = function(router) {
 
   router.get('/api/reviews', function*(next) {
     var query = this.request.query;
-    var ratings = [];
+    var ratings = [],tags = [],overall_rating = [];
     try {
       ratings = yield db.select().from('ratings')
-    } catch(e) {
-      console.error(e)
-    }
-    var tags = []
-    try {
       tags = yield db.select('reviews.id as review_id','tag_id','tag_category_id').from(function() {
         this.select('tags.id as tag_id','tag_category_id','tag_review.review_id').from('tag_review').join('tags','tag_review.tag_id','tags.id').as('t1')
       }).join('reviews','reviews.id','t1.review_id') 
-    } catch(e) {
-      console.error(e)
-    } 
-    //get 'overall' rating category
-    var overall_rating = [] 
-    try {
       overall_rating = yield db.select().from('rating_categories').where('name','overall')
     } catch(e) {
       console.error(e)
