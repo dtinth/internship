@@ -204,18 +204,16 @@ angular.module('internship', ['internship.api'])
 .controller('ThailandPlaceController', [
   '$scope','$http',
   function($scope, $http) {
+    var obj = {}
     $http.get("http://128.199.76.147:8001/api/places")
-
     .success(function(response) {
-      var places = response.places;
-      var tags = response.tags;
-      var tacCategory = response.tag_category_tag;
-
-      places.forEach(function(place) {
-        place.tags = tags.filter(function(tag) {
-          return tag.place_id = place.place_id
-        })
-      })
-      $scope.places_in_thailand = places;});
+      var places = response;
+      $http.get("http://128.199.76.147:8001/api/tags")
+      .success(function(response) {
+        var tags = response;
+        obj = { 'places' : places , 'filters' : tags }  
+        $scope.places_in_thailand = obj;
+      }
+    });
   }
 ])

@@ -10,12 +10,12 @@ include lib/common
           h1.filter-header.arabica Filters
           div(ng-repeat='filter in filters')
             div(class='{{"panel panel-" + filter.color}}')
-              .panel-heading.arabica {{filter.title}}
+              .panel-heading.arabica {{filter.name}}
               .panel-body.filter-check-wrapper
-                .checkbox(ng-repeat='option in filter.options')
+                .checkbox(ng-repeat='option in filter.tags')
                   label
                     input(type='checkbox', checked='checked')
-                    | {{option.text}}
+                    | {{option.value}}
 
 
          
