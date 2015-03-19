@@ -97,24 +97,30 @@ exports.install = function(router) {
    //      	})
    //          .join('places', 'places.id', 'reviews_score.place_id').where('reviews_score.name','overall')
    //          .as('places_api')
-    var places = [];
+    var reviews = [], places = [],tags = [];
     try {
+      reviews = yield db.select().from('reviews')
       places = yield db.select().from('places')
+      tags = yield db.select('reviews.id as review_id','tag_id','tag_category_id').from(function() {
+        this.select('tags.id as tag_id','tag_category_id','tag_review.review_id').from('tag_review').join('tags','tag_review.tag_id','tags.id').as('t1')
+      }).join('reviews','reviews.id','t1.review_id') 
     } catch(e) {
       console.error(e)
     }
-    var reviews = [];
-    try {
-      reviews = yield db.select().from('reviews')
-    } catch(e) {
-      console.erroe(e)
-    }
-
+    places[0].agsdfgasdf = reviews 
     for(var i = places.length - 1; i >= 0; --i) {
-      	places[i].reviews_count = reviews.filter(function(review){
-        return review.place_id == places[i].id
-      }).length
-    } 
+      var assoc_review =  reviews.filter(function(review){
+                return review.place_id == places[i].id
+      })
+      assoc_review.forEach(function(review){
+        places[i].tags = tags.filter(function(tag) {
+          return review.id = tag.review_id
+        })
+      })
+      places[i].reviews = assoc_review
+      places[i].reviews_count = assoc_review.length
+    }
+     
     this.body = places
   });
   
@@ -149,14 +155,19 @@ exports.install = function(router) {
    *  200: { description: "Detailed review information." }
    */
   router.get('/api/reviews/:id' , function*(next) {
-    
+    var tags = [];
+    try { 
+      tags = yield db.select('tags.id','tags.tag_category_id').from('tag_review').join('tags','tags.id','tag_review.tag_id')
+    } catch(e) {
+      console.error(e)
+    } 
     var review_by_id = [];
     try {
       review_by_id = yield db.select().from('reviews').where('id', this.params.id)
     } catch(e) {
       console.error(e)
     }
-      
+    review_by_id[0].tags = tags 
     this.body =  review_by_id[0]
   });
 
@@ -247,6 +258,14 @@ exports.install = function(router) {
     } catch(e) {
       console.error(e)
     }
+    var tags = []
+    try {
+      tags = yield db.select('reviews.id as review_id','tag_id','tag_category_id').from(function() {
+        this.select('tags.id as tag_id','tag_category_id','tag_review.review_id').from('tag_review').join('tags','tag_review.tag_id','tags.id').as('t1')
+      }).join('reviews','reviews.id','t1.review_id') 
+    } catch(e) {
+      console.error(e)
+    } 
     //get 'overall' rating category
     var overall_rating = [] 
     try {
@@ -254,8 +273,7 @@ exports.install = function(router) {
     } catch(e) {
       console.error(e)
     }
-    var overall_rating_id = overall_rating[0].id
-    
+    var overall_rating_id = overall_rating[0].id 
     //get review by place id
     if(query.place_id != undefined) {
       var reviews_by_place_id = [];
@@ -268,7 +286,10 @@ exports.install = function(router) {
         reviews_by_place_id[i].ratings = ratings.filter(function(rating) {
           return rating.review_id == reviews_by_place_id[i].id
         })
-        
+        reviews_by_place_id[i].tags = tags.filter(function(tag) {
+          return tag.review_id == reviews_by_place_id[i].id
+        })
+
       }
       this.body = reviews_by_place_id
     }
@@ -282,6 +303,9 @@ exports.install = function(router) {
       }
       
       for(var i = all_reviews.length - 1 ; i >= 0 ; --i) {
+        all_reviews[i].tags = tags.filter(function(tag) {
+          return tag.review_id == all_reviews[i].id
+        })
         var array = ratings.filter(function(rating) { 
           return rating.review_id == all_reviews[i].id
         })

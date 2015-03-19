@@ -4,12 +4,13 @@
   "description": "Legacy project by SKE09 for Seminar course.",
   "main": "server.js",
   "dependencies": {
+    "assign": "^0.1.7",
     "bluebird": "^2.9.14",
     "co": "^4.4.0",
     "harp": "^0.15.2",
     "jade": "^1.9.2",
-    "jsonwebtoken": "^4.2.0",
     "js-yaml": "^3.2.7",
+    "jsonwebtoken": "^4.2.0",
     "knex": "^0.7.6",
     "koa": "^0.18.0",
     "koa-body": "^1.1.0",
@@ -23,6 +24,7 @@
     "koa-views": "^3.0.0",
     "mysql": "^2.5.4",
     "node-sass": "^2.0.1",
+    "object": "^0.1.1",
     "object-assign": "^2.0.0",
     "request": "^2.53.0"
   },
