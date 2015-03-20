@@ -97,13 +97,14 @@ exports.install = function(router) {
    //      	})
    //          .join('places', 'places.id', 'reviews_score.place_id').where('reviews_score.name','overall')
    //          .as('places_api')
-    var reviews = [], places = [],tags = [];
+    var reviews = [], places = [],tags = [],tc =[];
     try {
       reviews = yield db.select().from('reviews')
       places = yield db.select().from('places')
       tags = yield db.select('reviews.id as review_id','tag_id','tag_category_id').from(function() {
         this.select('tags.id as tag_id','tag_category_id','tag_review.review_id').from('tag_review').join('tags','tag_review.tag_id','tags.id').as('t1')
-      }).join('reviews','reviews.id','t1.review_id') 
+      }).join('reviews','reviews.id','t1.review_id')
+      tc = yield db.select().from('tag_categories').join('tags','tags.tag_category_id','tag_categories.id')
     } catch(e) {
       console.error(e)
     } 
@@ -119,10 +120,16 @@ exports.install = function(router) {
       })
       place_tags = [].concat.apply([], place_tags)
       id = []
-      places[i].tags = place_tags.filter(function(element) {
+      var set = place_tags.filter(function(element) {
         id.push(element.tag_id)  
         return !(element.tag_id in id)
       })
+      set.forEach(function(tag){
+        tag.name = tc.filter(function(t) {
+          return tag.tag_id == t.id
+        })[0].value
+      })
+      places[i].tags = set
       places[i].reviews_count = assoc_review.length
     }
      
@@ -324,14 +331,14 @@ exports.install = function(router) {
 
     var tags = []
     try { 
-      tags = yield db.select('tag_category_id','value').from('tags')
+      tags = yield db.select('id','tag_category_id','value').from('tags')
     } catch(e) { 
       console.error(e)
     }
 
     for (var i = tag_categories.length - 1; i >= 0; --i) {
       tag_categories[i].tags = tags.filter(function(tag) {
-        return tag.tag_category_id = tag_categories[i].id
+        return tag.tag_category_id == tag_categories[i].id
       })
     } 
     this.body = tag_categories
