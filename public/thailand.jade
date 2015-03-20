@@ -8,20 +8,20 @@ include lib/common
       .row
         .col-md-3.col-sm-3.col-lg-3
           h1.filter-header.arabica Filters
-          div(ng-repeat='filter in filters')
+          div(ng-repeat='filter in places_in_thailand.filters')
             div(class='{{"panel panel-" + filter.color}}')
-              .panel-heading.arabica {{filter.title}}
+              .panel-heading.arabica {{filter.name}}
               .panel-body.filter-check-wrapper
-                .checkbox(ng-repeat='option in filter.options')
+                .checkbox(ng-repeat='option in filter.tags')
                   label
                     input(type='checkbox', checked='checked')
-                    | {{option.text}}
+                    | {{option.value}}
 
 
          
         .col-md-9.col-sm-9.col-lg-9
           h1.filter-header.arabica Internship Places
-          .panel.panel-default(ng-repeat='place in places_in_thailand')
+          .panel.panel-default(ng-repeat='place in places_in_thailand.places')
               ul.list-group
                 li.list-group-item.internship-list
                   .media
@@ -34,7 +34,7 @@ include lib/common
                         span.glyphicon.glyphicon-heart.internship-rating(ng-if='place.rating>=5')
                         span.glyphicon.glyphicon-heart.internship-rating(ng-if='place.rating>=6')
                         = " "
-                        | ({{place.review_count}})
+                        | ({{place.reviews_count}})
                     .media-left
                       a(href='#')
                         img.media-object(src='assets/img/media.svg')
