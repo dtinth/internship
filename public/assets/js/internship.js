@@ -212,8 +212,9 @@ angular.module('internship', ['internship.api'])
       .success(function(response) {
         var tags = response;
         obj = { 'places' : places , 'filters' : tags }  
+        console.log(obj)
         $scope.places_in_thailand = obj;
-      }
-    });
+      });
+    })
   }
 ])
