@@ -211,8 +211,10 @@ angular.module('internship', ['internship.api'])
       $http.get("http://128.199.76.147:8001/api/tags")
       .success(function(response) {
         var tags = response;
+        places.forEach(function(place) {
+          var cat = [];
+        })
         obj = { 'places' : places , 'filters' : tags }  
-        console.log(obj)
         $scope.places_in_thailand = obj;
       });
     })

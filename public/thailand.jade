@@ -40,16 +40,16 @@ include lib/common
                         img.media-object(src='assets/img/media.svg')
                     .media-body
                       .row.internship-info
-                        a(href='place').link-on-white
+                        a(ng-href='place#!/{{place.id}}').link-on-white
                           h4.media-heading {{place.full_name}}
                         |     {{place.address}}
-                      .tags-wrapper
-                        span.label.label-black.tags Thailand
-                      .tags-wrapper
-                        span.label.label-blue.tags Paid
-                      .tags-wrapper
-                        span.label.label-green.tags Field of Work
-                      .tags-wrapper
-                        span.label.label-orange.tags Working Hours
-                      .tags-wrapper
-                        span.label.label-red.tags Programming Language
+                      .tags-wrapper(ng-repeat='tag in place.tags')
+                        span.label.label-black.tags {{tag.name}}
+                      //- .tags-wrapper
+                      //-   span.label.label-blue.tags Paid
+                      //- .tags-wrapper
+                      //-   span.label.label-green.tags Field of Work
+                      //- .tags-wrapper
+                      //-   span.label.label-orange.tags Working Hours
+                      //- .tags-wrapper
+                      //-   span.label.label-red.tags Programming Language
