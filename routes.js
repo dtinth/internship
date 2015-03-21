@@ -170,14 +170,20 @@ exports.install = function(router) {
    *  200: { description: "Detailed review information." }
    */
   router.get('/api/reviews/:id' , function*(next) {
-    var tags = [],review_by_id = [];
+    var tags = [],review_by_id = [],rating_by_review_id = [];
     try { 
-      tags = yield db.select('tags.id','tags.tag_category_id').from('tag_review').join('tags','tags.id','tag_review.tag_id')
+      rating_by_review_id = yield db.select('ratings.id','score','review_id','name','description','rating_categories.order').from('ratings').join('rating_categories','ratings.rating_category_id','rating_categories.id').where('review_id',this.params.id).orderBy('ratings.id')
+     
+      tags = yield db.select('t1.id','tag_category_id','name','value','tag_categories.order').from(function() {
+        this.select('tags.id','tags.value','tags.tag_category_id').from('tag_review').join('tags','tags.id','tag_review.tag_id').as('t1')
+      }).join('tag_categories','tag_categories.id','t1.tag_category_id')
+    //tags = yield db.select('tags.id','tags.tag_category_id').from('tag_review').join('tags','tags.id','tag_review.tag_id')
       review_by_id = yield db.select().from('reviews').where('id', this.params.id)
     } catch(e) {
       console.error(e)
     } 
-    review_by_id[0].tags = tags 
+    review_by_id[0].tags = tags
+    review_by_id[0].ratings = rating_by_review_id
     this.body =  review_by_id[0]
   });
 
