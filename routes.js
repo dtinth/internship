@@ -159,6 +159,32 @@ exports.install = function(router) {
 
     this.body = place_by_id[0]; 
   });
+
+  router.get('/api/tagcategories' , function*(next) {
+  //  this.body = "get internships with id :" + this.params.id;
+    var tag_categories = [],tags = [];
+    try {
+      tag_categories = yield db.select().from('tag_categories')
+    } catch(e) {
+      console.error(e) 
+    }
+
+    this.body = tag_categories; 
+  });
+
+
+  router.get('/api/ratingcategories' , function*(next) {
+  //  this.body = "get internships with id :" + this.params.id;
+    var rating_categories = [],tags = [];
+    try {
+      rating_categories = yield db.select().from('rating_categories')
+    } catch(e) {
+      console.error(e) 
+    }
+
+    this.body = rating_categories; 
+  });
+
  
   /**
    * GET /api/reviews/{id}
@@ -171,9 +197,8 @@ exports.install = function(router) {
    */
   router.get('/api/reviews/:id' , function*(next) {
     var tags = [],review_by_id = [],rating_by_review_id = [];
-    try { 
-      rating_by_review_id = yield db.select('ratings.id','score','review_id','name','description','rating_categories.order').from('ratings').join('rating_categories','ratings.rating_category_id','rating_categories.id').where('review_id',this.params.id).orderBy('ratings.id')
-     
+    try {
+      rating_by_review_id = yield db.select('ratings.id','score','review_id','name','description','rating_categories.order').from('ratings').join('rating_categories','ratings.rating_category_id','rating_categories.id').where('review_id',this.params.id).orderBy('ratings.id')     
       tags = yield db.select('t1.id','tag_category_id','name','value','tag_categories.order').from(function() {
         this.select('tags.id','tags.value','tags.tag_category_id').from('tag_review').join('tags','tags.id','tag_review.tag_id').as('t1')
       }).join('tag_categories','tag_categories.id','t1.tag_category_id')
