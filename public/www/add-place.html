@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html ng-app="internship">
+   <head>
+      <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+      <link rel="stylesheet" href="/assets/css/main-style.css">
+      <link rel="stylesheet" href="/assets/css/main-components.css">
+      <link rel="stylesheet" href="/assets/css/bootstrap-markdown.min.css">
+      <link rel="stylesheet" href="/assets/css/select2.min.css">
+      <link rel="stylesheet" href="/assets/css/datepicker.css">
+   </head>
+   <body>
+      <nav class="navbar navbar-grey navbar-fixed-top">
+         <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display-->
+            <div class="navbar-header"><button type="button" data-toggle="collapse" data-target="#nav-menu" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="index" class="navbar-brand">CPSK Internship</a></div>
+            <!-- Collect the nav links, forms, and other content for toggling-->
+            <div id="nav-menu" class="collapse navbar-collapse">
+               <ul class="nav navbar-nav">
+                  <li><a href="thailand">Thailand <span class="sr-only">(current)</span></a></li>
+                  <li><a href="overseas">Overseas</a></li>
+               </ul>
+               <ul ng-controller="LoginController" class="nav navbar-nav navbar-right">
+                  <li>
+                     <form role="search" class="navbar-form navbar-left">
+                        <div class="input-group nav-search-group"><input type="text" placeholder="Find Internship" class="form-control nav-search-input"><span class="input-group-btn"><button type="button" class="btn btn-grey-to-white"><span class="glyphicon glyphicon-search nav-search-btn"></span></button></span></div>
+                     </form>
+                  </li>
+                  <li ng-if="!Login.isLoggedIn"><a href="javascript://" ng-click="Login.login()">Login</a></li>
+                  <li ng-if="Login.isLoggedIn"><a href="javascript://" ng-click="Login.logout()">Logout ({{Login.user.name}})</a></li>
+               </ul>
+            </div>
+         </div>
+      </nav>
+      <form>
+         <section class="header add-place-page-header">
+            <div class="container header-content-wrapper">
+               <div class="col-md-7 col-lg-7 col-sm-12">
+                  <p class="header-content"><input id="place-name" type="text" placeholder="ชื่อสถานที่ฝึกงาน" required class="form-control form-place-name"></p>
+                  <p class="header-small-content"><input id="place-fullname" type="text" placeholder="ชื่อเต็มของสถานที่ฝึกงาน (optional)" class="form-control form-place-fullname"></p>
+                  <p class="header-small-content"><input id="place-address" type="text" placeholder="ที่อยู่ของสถานที่ฝึกงาน" class="form-control form-place-address"></p>
+                  <input type="file" class="hidden"><button id="upload-img" class="btn btn-danger btn-add-head-photo"><span class="glyphicon glyphicon-camera"> Upload Picture (Recommended 1200x900)</span></button>
+                  <h4><span id="img-path" class="label label-primary path"></span></h4>
+               </div>
+            </div>
+         </section>
+         <section class="page-content-wrapper overview-page-content-wrapper">
+            <div class="row">
+               <div class="panel panel-default respository"> <a class="link-on-white">Home </a>/ <a class="link-on-white">Overseas </a>/ Add New Place</div>
+               <div class="row col-md-12 col-lg-12 col-sm-12">
+                  <div class="row col-md-4 col-lg-4 col-sm-12">
+                     <div class="overview-content-header">Add New Place</div>
+                     <div class="review-topic-header">About</div>
+                     <p class="small-description">เขียนอธิบายเกี่ยวกับการสถานที่ฝึกงาน</p>
+                     <p class="small-description">สามารถใช้ได้ทั้งภาษาไทยและภาษาอังกฤษ โดยมีเนื้อหาแนะนำดังนี้</p>
+                     <p class="small-description">- ข้อมูลทั่วไปของสถานที่ฝึกงาน</p>
+                     <p class="small-description">- ประเภทของงาน</p>
+                     <p class="small-description">- คำแนะนำอื่นๆ</p>
+                  </div>
+                  <div class="row col-md-8 col-lg-8 col-sm-12"><textarea name="content" data-provide="markdown" data-hidden-buttons="Preview" rows="20" placeholder="สถานที่ฝึกงานเป็นยังไง มีอะไรบ้างงงง งงงง งง ง.." required></textarea></div>
+               </div>
+               <div class="row col-md-12 col-lg-12 col-sm-12 add-place-field-row">
+                  <div class="row col-md-4 col-lg-4 col-sm-12">
+                     <div class="review-topic-header">Website</div>
+                  </div>
+                  <div class="row col-md-8 col-lg-8 col-sm-12"><input id="website" type="text" name="website" placeholder="เว็บของสถานที่ฝึกงาน" class="form-control"></div>
+               </div>
+               <div class="row col-md-12 col-lg-12 col-sm-12 add-place-field-row">
+                  <div class="row col-md-4 col-lg-4 col-sm-12">
+                     <div class="review-topic-header">Location on Google Maps</div>
+                  </div>
+                  <div class="row col-md-4 col-lg-4 col-sm-12 lat-field"><input id="lat" type="text" name="lat" placeholder="ละติจูด" class="form-control"></div>
+                  <div class="row col-md-4 col-lg-4 col-sm-12"><input id="long" type="text" name="long" placeholder="ลองจิจูด" class="form-control"></div>
+               </div>
+            </div>
+         </section>
+         <div class="row add-place-field-row"><button type="submit" class="btn btn-primary btn-save">Add New Place</button></div>
+      </form>
+      <section class="copyright-wrapper">
+         <div class="copyright">© 2011 SKE09 All Rights Reserved</div>
+      </section>
+      <script src="/assets/js/jquery.js"></script><script src="/assets/js/bootstrap.min.js"></script><script src="/assets/js/angular.min.js"></script><script src="/assets/js/angular-route.js"></script><script src="/assets/js/internship.js"></script><script src="/assets/js/internship.api.js"></script><script src="/assets/js/internship.config.js"></script><script src="/assets/js/bootstrap-markdown.js"></script><script src="/assets/js/select2.min.js"></script><script src="/assets/js/bootstrap-datepicker.js"></script><script src="/assets/js/tags-select.js"></script>
+   </body>
+</html>

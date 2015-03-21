@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html ng-app="internship">
+   <head>
+      <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+      <link rel="stylesheet" href="/assets/css/main-style.css">
+      <link rel="stylesheet" href="/assets/css/main-components.css">
+   </head>
+   <body>
+      <nav class="navbar navbar-grey navbar-fixed-top">
+         <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display-->
+            <div class="navbar-header"><button type="button" data-toggle="collapse" data-target="#nav-menu" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="index" class="navbar-brand">CPSK Internship</a></div>
+            <!-- Collect the nav links, forms, and other content for toggling-->
+            <div id="nav-menu" class="collapse navbar-collapse">
+               <ul class="nav navbar-nav">
+                  <li><a href="thailand">Thailand <span class="sr-only">(current)</span></a></li>
+                  <li><a href="overseas">Overseas</a></li>
+               </ul>
+               <ul ng-controller="LoginController" class="nav navbar-nav navbar-right">
+                  <li>
+                     <form role="search" class="navbar-form navbar-left">
+                        <div class="input-group nav-search-group"><input type="text" placeholder="Find Internship" class="form-control nav-search-input"><span class="input-group-btn"><button type="button" class="btn btn-grey-to-white"><span class="glyphicon glyphicon-search nav-search-btn"></span></button></span></div>
+                     </form>
+                  </li>
+                  <li ng-if="!Login.isLoggedIn"><a href="javascript://" ng-click="Login.login()">Login</a></li>
+                  <li ng-if="Login.isLoggedIn"><a href="javascript://" ng-click="Login.logout()">Logout ({{Login.user.name}})</a></li>
+               </ul>
+            </div>
+         </div>
+      </nav>
+      <div ng-controller="PlacesController">
+         <section class="header oversea-page-header">
+            <div class="container header-content-wrapper">
+               <p class="header-content">Overseas</p>
+            </div>
+         </section>
+         <section class="page-content-wrapper overview-page-content-wrapper">
+            <div class="row">
+               <div class="col-md-3 col-sm-3 col-lg-3">
+                  <h1 class="filter-header arabica">Filters</h1>
+                  <div ng-repeat="cFilter in countryFilters">
+                     <div class="{{&quot;panel panel-&quot; + cFilter.color}}">
+                        <div class="panel-heading arabica">{{cFilter.title}}</div>
+                        <div class="panel-body filter-check-wrapper">
+                           <div ng-repeat="option in cFilter.options" class="checkbox"><label><input type="checkbox" checked="checked">{{option.text}}</label></div>
+                        </div>
+                     </div>
+                  </div>
+                  <div ng-repeat="filter in filters">
+                     <div class="{{&quot;panel panel-&quot; + filter.color}}">
+                        <div class="panel-heading arabica">{{filter.title}}</div>
+                        <div class="panel-body filter-check-wrapper">
+                           <div ng-repeat="option in filter.options" class="checkbox"><label><input type="checkbox" checked="checked">{{option.text}}</label></div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-md-9 col-sm-9 col-lg-9">
+                  <h1 class="filter-header arabica">Internship Places</h1>
+                  <div ng-repeat="place in places" class="panel panel-default">
+                     <ul class="list-group">
+                        <li class="list-group-item internship-list">
+                           <div class="media">
+                              <div class="internship-rating-wrapper">
+                                 <p><span ng-if="place.rating&gt;=1" class="glyphicon glyphicon-heart internship-rating"></span><span ng-if="place.rating&gt;=2" class="glyphicon glyphicon-heart internship-rating"></span><span ng-if="place.rating&gt;=3" class="glyphicon glyphicon-heart internship-rating"></span><span ng-if="place.rating&gt;=4" class="glyphicon glyphicon-heart internship-rating"></span><span ng-if="place.rating&gt;=5" class="glyphicon glyphicon-heart internship-rating"></span> ({{place.review_count}})</p>
+                              </div>
+                              <div class="media-left"><a href="#"><img src="assets/img/media.svg" class="media-object"></a></div>
+                              <div class="media-body">
+                                 <div class="row internship-info">
+                                    <a href="place" class="link-on-white">
+                                       <h4 class="media-heading">{{place.full_name}}</h4>
+                                    </a>
+                                    {{place.address}}
+                                 </div>
+                                 <div class="tags-wrapper"><span class="label label-black tags">Country</span></div>
+                                 <div class="tags-wrapper"><span class="label label-blue tags">Paid</span></div>
+                                 <div class="tags-wrapper"><span class="label label-green tags">Field of Work</span></div>
+                                 <div class="tags-wrapper"><span class="label label-orange tags">Working Hours</span></div>
+                                 <div class="tags-wrapper"><span class="label label-red tags">Programming Language</span></div>
+                              </div>
+                           </div>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+            </div>
+         </section>
+      </div>
+      <section class="copyright-wrapper">
+         <div class="copyright">© 2011 SKE09 All Rights Reserved</div>
+      </section>
+      <script src="/assets/js/jquery.js"></script><script src="/assets/js/bootstrap.min.js"></script><script src="/assets/js/angular.min.js"></script><script src="/assets/js/angular-route.js"></script><script src="/assets/js/internship.js"></script><script src="/assets/js/internship.api.js"></script><script src="/assets/js/internship.config.js"></script>
+   </body>
+</html>
