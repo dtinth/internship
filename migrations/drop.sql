@@ -1,0 +1,9 @@
+DROP TABLE tag_review;
+DROP TABLE tags;
+DROP TABLE tag_categories;
+DROP TABLE ratings;
+DROP TABLE rating_categories;
+DROP TABLE reviews;
+DROP TABLE places;
+DROP TABLE students;
+DROP TABLE files;
