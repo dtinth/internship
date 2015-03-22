@@ -199,9 +199,9 @@ exports.install = function(router) {
     var tags = [],review_by_id = [],rating_by_review_id = [];
     try {
       rating_by_review_id = yield db.select('ratings.id','score','review_id','name','description','rating_categories.order').from('ratings').join('rating_categories','ratings.rating_category_id','rating_categories.id').where('review_id',this.params.id).orderBy('ratings.id')     
-      tags = yield db.select('t1.id','tag_category_id','name','value','tag_categories.order').from(function() {
-        this.select('tags.id','tags.value','tags.tag_category_id').from('tag_review').join('tags','tags.id','tag_review.tag_id').as('t1')
-      }).join('tag_categories','tag_categories.id','t1.tag_category_id')
+      tags = yield db.select('t1.id','tag_category_id','name','value','tag_categories.order','t1.review_id').from(function() {
+        this.select('tags.id','tags.value','tags.tag_category_id','tag_review.review_id').from('tag_review').join('tags','tags.id','tag_review.tag_id').as('t1')
+      }).join('tag_categories','tag_categories.id','t1.tag_category_id').where('t1.review_id',this.params.id)
     //tags = yield db.select('tags.id','tags.tag_category_id').from('tag_review').join('tags','tags.id','tag_review.tag_id')
       review_by_id = yield db.select().from('reviews').where('id', this.params.id)
     } catch(e) {
@@ -240,15 +240,36 @@ exports.install = function(router) {
     var requestBody = this.request.body
     var message = ""
     // data to save
+    console.log("requestBody")
+    console.log(requestBody);
     var reviewer = requestBody.reviewer_id
     var place = requestBody.place_id
-    
+    var start_date = requestBody.start
+    var finish_date = requestBody.finish
+    var detail = requestBody.detail
+    var sum = requestBody.summary
+    var rating = requestBody.ratings
+    var tag = requestBody.tags
+    var position = requestBody.position
+    var review_obj = {"reviewer_id":reviewer,"place_id":place,"start":start_date,"finish":finish_date,"detail":detail,"summary":sum,"position":position} 
     try {
       hasReviewer = (yield db.select().from('students').where('id', reviewer)).length > 0
       hasPlace  = (yield db.select().from('places').where('id', place)).length > 0
       if(hasPlace && hasReviewer) {
-        var insert = yield db('reviews').insert(requestBody);
-        message = insert[0] 
+        var review_id = yield db('reviews').insert(review_obj)
+        console.log("test",review_id)
+        review_id = review_id[0]
+        console.log("tag",tag)
+        for(var i = 0 ; i < tag.length ; i++){
+          var tag_obj = {"tag_id":tag[i],"review_id":review_id}
+          yield db('tag_review').insert(tag_obj) 
+        }
+        console.log("tag fin")
+        for(var i = 0 ; i < rating.length ; i++){
+          var rating_obj = {"score":rating[i].rating_score,"review_id":review_id,"rating_category_id":rating[i].rating_category}
+          yield db('ratings').insert(rating_obj)
+        }
+        message = review_id
       }
       else { 
         message = "not found reviewer or place" 
@@ -274,15 +295,17 @@ exports.install = function(router) {
     // data to save
     var name = requestBody.name
     var full_name = requestBody.full_name
-    
+    var file_id = requestBody.file_id
+    var address
     try {
       hasPlace  = (yield db.select().from('places').where('name',name).orWhere('full_name',full_name)).length > 0
-      if(!hasPlace) {
+      hasFile = (yield db.select().from('files').where('id',file_id)).length > 0 
+      if(!hasPlace && hasFile) {
         var insert = yield db('places').insert(requestBody);
         message = insert[0]
       }
       else {
-        var message = "place already exists"
+        var message = "place already exists or file is not exists"
       }
     } catch (e) {
       console.error(e)
