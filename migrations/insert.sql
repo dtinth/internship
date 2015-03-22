@@ -69,13 +69,3 @@ INSERT INTO `tags`(`id`, `tag_category_id`, `value`) VALUES (45,6,'Technical Wri
 INSERT INTO `tags`(`id`, `tag_category_id`, `value`) VALUES (46,6,'Web Development');
 INSERT INTO `tags`(`id`, `tag_category_id`, `value`) VALUES (47,6,'Webmaster / Web Design');
 
-DROP TABLE tag_review;
-DROP TABLE tags;
-DROP TABLE tag_categories;
-DROP TABLE ratings;
-DROP TABLE rating_categories;
-DROP TABLE reviews;
-DROP TABLE places;
-DROP TABLE students;
-DROP TABLE files;
-
