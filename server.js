@@ -11,14 +11,14 @@ var koaBody = require('koa-body')()
 routes.install(router)
 
 app
-  .use(serve(__dirname + '/static'))
+  //.use(serve(__dirname + '/static'))
+  .use(serve(__dirname + '/files'))
   .use(views(__dirname + '/views', { default: 'jade' }))
   .use(json())
   .use(cors())
   .use(require('./lib/authentication').middleware())
   .use(router.routes())
   .use(router.allowedMethods())
-
 app.listen(8001, function() {
   console.log('Listening on port', this.address().port)
 })

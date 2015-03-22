@@ -107,7 +107,7 @@ exports.install = function(router) {
       tc = yield db.select().from('tag_categories').join('tags','tags.tag_category_id','tag_categories.id')
     } catch(e) {
       console.error(e)
-    } 
+    }
     for(var i = places.length - 1; i >= 0; --i) {
       var assoc_review =  reviews.filter(function(review){
                 return review.place_id == places[i].id
@@ -149,7 +149,7 @@ exports.install = function(router) {
   //  this.body = "get internships with id :" + this.params.id;
     var place_by_id = [],tags = [];
     try {
-      place_by_id = yield db.select().from('places').join('files','files.id','places.file_id').where('places.id', this.params.id);
+      place_by_id = yield db.select('places.id','name','file_id','address','latitude','longitude','about','website_url').from('places').join('files','files.id','places.file_id').where('places.id', this.params.id);
       //tags = yield db.select('reviews.id as review_id','tag_id','tag_category_id').from(function() {
       //  this.select('tags.id as tag_id','tag_category_id','tag_review.review_id').from('tag_review').join('tags','tag_review.tag_id','tags.id').as('t1')
       //}).join('reviews','reviews.id','t1.review_id') 
@@ -403,6 +403,7 @@ exports.install = function(router) {
      */
     router.post('/files', koaBody, function *(next) {
       var reqbody = this.request.body
+      console.log(reqbody)
       var file = fs.readFileSync(reqbody.files.file.path)
       var filetype = reqbody.files.file.name.substring(reqbody.files.file.name.lastIndexOf('.'),reqbody.files.file.name.length)
       var sha256 = crypto.createHash("sha256");
@@ -420,7 +421,7 @@ exports.install = function(router) {
         console.error(e)
       }
       if(insert == undefined) this.body = "cannot insert";
-      else this.body = insert[0];
+      else this.body = { 'file_id' : insert[0], 'url' : result+filetype };
     });
 
   /**
