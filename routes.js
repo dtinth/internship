@@ -39,7 +39,7 @@ exports.install = function(router) {
    *  302: { description: 'Redirection to login page.' }
    */
   router.get('/login', function*(next) { 
-    var SELF_BASE = 'http://localhost:8001'
+    var SELF_BASE = 'http://128.199.76.147:8001'
     this.redirect(KULogin.getURL(SELF_BASE + '/login/callback'))
   })
 
@@ -152,7 +152,9 @@ exports.install = function(router) {
       place_by_id = yield db.select('places.id','name','file_id','address','latitude','longitude','about','website_url').from('places').join('files','files.id','places.file_id').where('places.id', this.params.id);
       //tags = yield db.select('reviews.id as review_id','tag_id','tag_category_id').from(function() {
       //  this.select('tags.id as tag_id','tag_category_id','tag_review.review_id').from('tag_review').join('tags','tag_review.tag_id','tags.id').as('t1')
-      //}).join('reviews','reviews.id','t1.review_id') 
+      //}).join('reviews','reviews.id','t1.review_id')
+      url = yield db.select('url').from('files').where('id', place_by_id[0].file_id)
+      place_by_id[0].url = url[0].url;
     } catch(e) {
       console.error(e) 
     }
@@ -280,8 +282,74 @@ exports.install = function(router) {
     }
     this.body = message 
   });
-  
-  
+  router.delete('/api/reviews/:id', koaBody ,function*(next){
+    var requestBody = this.request.body
+    var reviewer_id = requestBody.reviwer_id;
+    var review_id = this.params.id
+    var review_obj = yield db('reviews').where('id',review_id)
+    if(review_obj[0].reviwer_id == reviewer_id){
+      yield db('ratings').where('review_id',review_id).del()
+      yield db('tag_review').where('review_id',review_id).del()
+      yield db('reviews').where('id',review_id).del()    
+      this.body = "deleted"
+    }
+    else{
+      this.body = "error"
+    }
+
+  });  
+  router.put('/api/reviews/:id', koaBody , function*(next) {
+    var requestBody = this.request.body
+    var message = ""
+    // data to save
+    console.log("requestBody")
+    console.log(requestBody);
+    var reviewer = requestBody.reviewer_id
+    var place = requestBody.place_id
+    var start_date = requestBody.start
+    var finish_date = requestBody.finish
+    var detail = requestBody.detail
+    var sum = requestBody.summary
+    var rating = requestBody.ratings
+    var tag = requestBody.tags
+    var position = requestBody.position
+    var review_obj = {"reviewer_id":reviewer,"place_id":place,"start":start_date,"finish":finish_date,"detail":detail,"summary":sum,"position":position}
+    try {
+      
+      hasPlace  = (yield db.select().from('places').where('id', place)).length > 0
+      var review = (db('reviews').where('id',this.params.id))
+      var review_obj = (yield review)[0]
+      var review_id = review_obj.id
+      console.log('test',review_obj);
+      if(reviewer != review_obj.reviewer_id){
+        message = "error"
+
+      }
+      else if(hasPlace) {
+        review.update(review_obj)
+        console.log('test22')
+        yield db('tag_review').where('review_id',review_id).del()
+        console.log('tag_review')
+        for(var i = 0 ; i < tag.length ; i++){
+          var tag_obj = {"tag_id":tag[i],"review_id":review_id}
+          yield db('tag_review').insert(tag_obj)
+        }
+        console.log("tag fin")
+        yield db('ratings').where('review_id',review_id).del()
+        for(var i = 0 ; i < rating.length ; i++){
+          var rating_obj = {"score":rating[i].rating_score,"review_id":review_id,"rating_category_id":rating[i].rating_category}
+          yield db('ratings').insert(rating_obj)
+        }
+        message = review_id
+      }
+      else {
+        message = "not found reviewer or place"
+         }
+      }catch(e){
+        console.error(e)
+      }
+        this.body = message  
+  })
 
 
 
