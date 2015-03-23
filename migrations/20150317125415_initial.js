@@ -19,6 +19,11 @@ exports.up = function(knex, Promise) {
     t.boolean('is_admin')
   })
 
+  .createTable('counties', function(t) {
+    t.increments()
+    t.string('name')
+  })
+
   .createTable('places', function(t) {
     t.increments()
     t.string('name')
@@ -27,6 +32,7 @@ exports.up = function(knex, Promise) {
     t.float('latitude')
     t.float('longitude')
     t.text('about')
+    t.text('country_id').unsigned().references('id').inTable('countries')
     t.string('website_url')
     t.integer('file_id').unsigned().references('id').inTable('files')
   })

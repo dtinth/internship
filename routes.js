@@ -75,6 +75,30 @@ exports.install = function(router) {
     this.body = { token: token }
   })
 
+
+  router.get('/api/countries', function*(next) { 
+    var countries = [],tags = [];
+    try {
+      countries = yield db.select().from('countries')
+    } catch(e) {
+      console.error(e) 
+    }
+
+    this.body = countries; 
+
+  })
+
+  router.get('/api/availablecountries', function*(next) { 
+    var ava_countries = [],tags = [];
+    try {
+      ava_countries = yield db.select('countries.id','countries.name').from('countries').join('places','places.country_id','countries.id');
+    } catch(e) {
+      console.error(e) 
+    }
+
+    this.body = ava_countries; 
+  })
+
   /**
    * GET /api/places
    * Returns all available internship places.
@@ -83,24 +107,10 @@ exports.install = function(router) {
    *  200: { description: "An array of internship places." }
    */
   router.get('/api/places' , function*(next) {	
-    // var places = db.select().from(function() {
-   //      this.column('reviews_ratings.place_id', 'rating_categories.name')
-   //      	.avg('reviews_ratings.score as avg_rating').count('rating_categories.name as review_count')
-   //              .from(function() {
-   //                  this.column('ratings.rating_category_id','ratings.score','reviews.place_id')
-   //                  .from('reviews')
-   //                      .join('ratings', 'reviews.id', 'ratings.review_id').as('reviews_ratings')
-   //              })
-   //              .join('rating_categories', 'rating_categories.id', 'reviews_ratings.rating_category_id')
-   //                  .groupBy('rating_categories.name')
-   //                  .as('reviews_score')
-   //      	})
-   //          .join('places', 'places.id', 'reviews_score.place_id').where('reviews_score.name','overall')
-   //          .as('places_api')
     var reviews = [], places = [],tags = [],tc =[];
     try {
       reviews = yield db.select().from('reviews')
-      places = yield db.select().from('places')
+      places = yield db.select('places.id','places.name','places.full_name','places.address','places.latitude','places.longitude','places.about','places.website_url','places.file_id','places.country_id').from('places').join('countries','places.country_id','countries.id')
       tags = yield db.select('reviews.id as review_id','tag_id','tag_category_id').from(function() {
         this.select('tags.id as tag_id','tag_category_id','tag_review.review_id').from('tag_review').join('tags','tag_review.tag_id','tags.id').as('t1')
       }).join('reviews','reviews.id','t1.review_id')
@@ -132,10 +142,91 @@ exports.install = function(router) {
       places[i].tags = set
       places[i].reviews_count = assoc_review.length
     }
+    this.body = places
+  })
+
+  router.get('/api/places/thai' , function*(next) {	
+    var reviews = [], places = [],tags = [],tc =[];
+    try {
+      reviews = yield db.select().from('reviews')
+      places = yield db.select('places.id','places.name','places.full_name','places.address','places.latitude','places.longitude','places.about','places.website_url','places.file_id','places.country_id').from('places').join('countries','places.country_id','countries.id').where('countries.name','Thailand')
+      tags = yield db.select('reviews.id as review_id','tag_id','tag_category_id').from(function() {
+        this.select('tags.id as tag_id','tag_category_id','tag_review.review_id').from('tag_review').join('tags','tag_review.tag_id','tags.id').as('t1')
+      }).join('reviews','reviews.id','t1.review_id')
+      tc = yield db.select().from('tag_categories').join('tags','tags.tag_category_id','tag_categories.id')
+    } catch(e) {
+      console.error(e)
+    }
+    for(var i = places.length - 1; i >= 0; --i) {
+      var assoc_review =  reviews.filter(function(review){
+                return review.place_id == places[i].id
+      })
+      place_tags = []
+      assoc_review.forEach(function(review){
+        place_tags.push(tags.filter(function(tag) {
+          return review.id == tag.review_id
+        }))
+      })
+      place_tags = [].concat.apply([], place_tags)
+      id = []
+      var set = place_tags.filter(function(element) {
+        id.push(element.tag_id)  
+        return !(element.tag_id in id)
+      })
+      set.forEach(function(tag){
+        tag.name = tc.filter(function(t) {
+          return tag.tag_id == t.id
+        })[0].value
+      })
+      places[i].tags = set
+      places[i].reviews_count = assoc_review.length
+    }
+    
      
     this.body = places
   });
-  
+
+    router.get('/api/places/overseas' , function*(next) {	
+    var reviews = [], places = [],tags = [],tc =[];
+    try {
+      reviews = yield db.select().from('reviews')
+      places = yield db.select('places.id','places.name','places.full_name','places.address','places.latitude','places.longitude','places.about','places.website_url','places.file_id','places.country_id').from('places').join('countries','places.country_id','countries.id').whereNot('countries.name','Thailand')
+      tags = yield db.select('reviews.id as review_id','tag_id','tag_category_id').from(function() {
+        this.select('tags.id as tag_id','tag_category_id','tag_review.review_id').from('tag_review').join('tags','tag_review.tag_id','tags.id').as('t1')
+      }).join('reviews','reviews.id','t1.review_id')
+      tc = yield db.select().from('tag_categories').join('tags','tags.tag_category_id','tag_categories.id')
+    } catch(e) {
+      console.error(e)
+    }
+    for(var i = places.length - 1; i >= 0; --i) {
+      var assoc_review =  reviews.filter(function(review){
+                return review.place_id == places[i].id
+      })
+      place_tags = []
+      assoc_review.forEach(function(review){
+        place_tags.push(tags.filter(function(tag) {
+          return review.id == tag.review_id
+        }))
+      })
+      place_tags = [].concat.apply([], place_tags)
+      id = []
+      var set = place_tags.filter(function(element) {
+        id.push(element.tag_id)  
+        return !(element.tag_id in id)
+      })
+      set.forEach(function(tag){
+        tag.name = tc.filter(function(t) {
+          return tag.tag_id == t.id
+        })[0].value
+      })
+      places[i].tags = set
+      places[i].reviews_count = assoc_review.length
+    }
+    
+     
+    this.body = places
+  });
+
   /**
    * GET /api/places/{id}
    * Retrives the information about one internship place.
@@ -149,7 +240,7 @@ exports.install = function(router) {
   //  this.body = "get internships with id :" + this.params.id;
     var place_by_id = [],tags = [];
     try {
-      place_by_id = yield db.select('places.id','name','file_id','address','latitude','longitude','about','website_url').from('places').join('files','files.id','places.file_id').where('places.id', this.params.id);
+      place_by_id = yield db.select('places.id','country_id','name','full_name','file_id','address','latitude','longitude','about','website_url').from('places').join('files','files.id','places.file_id').where('places.id', this.params.id);
       //tags = yield db.select('reviews.id as review_id','tag_id','tag_category_id').from(function() {
       //  this.select('tags.id as tag_id','tag_category_id','tag_review.review_id').from('tag_review').join('tags','tag_review.tag_id','tags.id').as('t1')
       //}).join('reviews','reviews.id','t1.review_id')
@@ -161,6 +252,8 @@ exports.install = function(router) {
 
     this.body = place_by_id[0]; 
   });
+
+  
 
   router.get('/api/tagcategories' , function*(next) {
   //  this.body = "get internships with id :" + this.params.id;
