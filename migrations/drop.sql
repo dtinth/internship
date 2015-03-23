@@ -5,5 +5,6 @@ DROP TABLE ratings;
 DROP TABLE rating_categories;
 DROP TABLE reviews;
 DROP TABLE places;
+DROP TABLE countries;
 DROP TABLE students;
 DROP TABLE files;
